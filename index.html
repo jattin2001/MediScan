@@ -1,0 +1,2663 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediScan — Symptom Checker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #f7f5f0;
+        --surface: #ffffff;
+        --surface2: #f0ede8;
+        --text: #1a1714;
+        --text2: #6b6460;
+        --text3: #9e9894;
+        --accent: #2d6a4f;
+        --accent2: #40916c;
+        --accent-light: #d8f3dc;
+        --warn: #e76f51;
+        --warn-light: #fde8e2;
+        --moderate: #e9c46a;
+        --moderate-light: #fef9ec;
+        --border: #e2ddd8;
+        --radius: 16px;
+        --radius-sm: 10px;
+        --shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
+        --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      /* HEADER */
+      .app-header {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 64px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .logo-icon {
+        width: 36px;
+        height: 36px;
+        background: var(--accent);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .logo-text {
+        font-family: "DM Serif Display", serif;
+        font-size: 22px;
+        color: var(--text);
+        letter-spacing: -0.5px;
+      }
+      .logo-text span {
+        color: var(--accent);
+      }
+      .header-badge {
+        font-size: 11px;
+        background: var(--accent-light);
+        color: var(--accent);
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-weight: 500;
+      }
+
+      /* HERO */
+      .hero {
+        background: linear-gradient(135deg, var(--accent) 0%, #1b4332 100%);
+        padding: 56px 24px 48px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 200px;
+        height: 200px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 50%;
+      }
+      .hero::after {
+        content: "";
+        position: absolute;
+        bottom: -80px;
+        left: -40px;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 50%;
+      }
+      .hero h1 {
+        font-family: "DM Serif Display", serif;
+        font-size: 38px;
+        color: #fff;
+        line-height: 1.15;
+        letter-spacing: -1px;
+        margin-bottom: 12px;
+      }
+      .hero h1 em {
+        font-style: italic;
+        color: #b7e4c7;
+      }
+      .hero p {
+        font-size: 15px;
+        color: rgba(255, 255, 255, 0.75);
+        max-width: 440px;
+        margin: 0 auto 28px;
+        line-height: 1.6;
+      }
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 32px;
+        flex-wrap: wrap;
+      }
+      .hero-stat {
+        text-align: center;
+      }
+      .hero-stat-num {
+        font-family: "DM Serif Display", serif;
+        font-size: 24px;
+        color: #fff;
+      }
+      .hero-stat-lbl {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      /* MAIN LAYOUT */
+      .main {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 32px 16px 80px;
+      }
+
+      /* SEARCH PANEL */
+      .panel {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 28px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+      }
+      .panel-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+      }
+      .search-wrap {
+        position: relative;
+        margin-bottom: 16px;
+      }
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: var(--text3);
+      }
+      #sym-input {
+        width: 100%;
+        padding: 13px 14px 13px 42px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        transition: border-color 0.2s;
+        outline: none;
+      }
+      #sym-input:focus {
+        border-color: var(--accent);
+        background: #fff;
+      }
+      #sym-input::placeholder {
+        color: var(--text3);
+      }
+
+      .autocomplete {
+        position: absolute;
+        top: calc(100% + 4px);
+        left: 0;
+        right: 0;
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        box-shadow: var(--shadow-hover);
+        z-index: 50;
+        overflow: hidden;
+        display: none;
+      }
+      .auto-item {
+        padding: 11px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text);
+        border-bottom: 1px solid var(--bg);
+        transition: background 0.15s;
+      }
+      .auto-item:last-child {
+        border-bottom: none;
+      }
+      .auto-item:hover {
+        background: var(--accent-light);
+      }
+      .auto-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+      }
+
+      /* QUICK CHIPS */
+      .quick-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .q-chip {
+        padding: 7px 14px;
+        border-radius: 30px;
+        font-size: 13px;
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+        color: var(--text2);
+        background: var(--bg);
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+        user-select: none;
+      }
+      .q-chip:hover {
+        border-color: var(--accent2);
+        color: var(--accent);
+      }
+      .q-chip.on {
+        background: var(--accent-light);
+        border-color: var(--accent);
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* SELECTED SYMPTOMS */
+      .sel-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px 28px;
+        margin-bottom: 24px;
+        display: none;
+      }
+      .sel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+      .sel-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .clear-btn {
+        font-size: 12px;
+        color: var(--warn);
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-family: "DM Sans", sans-serif;
+      }
+      .sel-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .sel-chip {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 30px;
+        background: var(--accent-light);
+        border: 1.5px solid var(--accent);
+        font-size: 13px;
+        color: var(--accent);
+        font-weight: 500;
+      }
+      .sel-chip button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--accent2);
+        font-size: 16px;
+        line-height: 1;
+        padding: 0;
+        display: flex;
+        align-items: center;
+      }
+      .analyze-btn {
+        width: 100%;
+        padding: 15px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 15px;
+        font-weight: 600;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        letter-spacing: 0.3px;
+      }
+      .analyze-btn:hover {
+        background: #1b4332;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(45, 106, 79, 0.3);
+      }
+      .analyze-btn:disabled {
+        background: var(--text3);
+        transform: none;
+        box-shadow: none;
+        cursor: default;
+      }
+
+      /* SEVERITY SLIDER */
+      .severity-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px 28px;
+        margin-bottom: 24px;
+      }
+      .sev-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .sev-label {
+        font-size: 13px;
+        color: var(--text2);
+        flex-shrink: 0;
+      }
+      input[type="range"] {
+        flex: 1;
+        -webkit-appearance: none;
+        height: 4px;
+        border-radius: 2px;
+        background: linear-gradient(
+          to right,
+          var(--accent) 0%,
+          var(--accent) var(--val, 50%),
+          var(--border) var(--val, 50%)
+        );
+        outline: none;
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--accent);
+        cursor: pointer;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .sev-val {
+        font-size: 13px;
+        font-weight: 600;
+        min-width: 80px;
+        text-align: right;
+        color: var(--accent);
+      }
+
+      /* PATIENT PROFILE */
+      .profile-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+      }
+      .profile-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 16px;
+        margin-top: 4px;
+      }
+      @media (max-width: 600px) {
+        .profile-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (max-width: 380px) {
+        .profile-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .profile-field label {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--text3);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin-bottom: 7px;
+      }
+      .profile-field input,
+      .profile-field select {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.2s;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      .profile-field input:focus,
+      .profile-field select:focus {
+        border-color: var(--accent);
+        background: #fff;
+      }
+      .profile-field .input-hint {
+        font-size: 11px;
+        color: var(--text3);
+        margin-top: 4px;
+      }
+      .age-badge {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        background: var(--accent-light);
+        color: var(--accent);
+        margin-top: 6px;
+      }
+      .profile-note {
+        font-size: 12px;
+        color: var(--text2);
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        margin-top: 14px;
+        border-left: 3px solid var(--accent);
+        display: none;
+      }
+      .profile-note.show {
+        display: block;
+      }
+      .bmi-pill {
+        display: inline-block;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-top: 6px;
+      }
+      .bmi-under {
+        background: #e3f2fd;
+        color: #1565c0;
+      }
+      .bmi-normal {
+        background: var(--accent-light);
+        color: var(--accent);
+      }
+      .bmi-over {
+        background: var(--moderate-light);
+        color: #9c6c00;
+      }
+      .bmi-obese {
+        background: var(--warn-light);
+        color: var(--warn);
+      }
+
+      /* RESULTS */
+      .results-header {
+        font-family: "DM Serif Display", serif;
+        font-size: 26px;
+        color: var(--text);
+        margin-bottom: 6px;
+        letter-spacing: -0.5px;
+      }
+      .results-sub {
+        font-size: 13px;
+        color: var(--text2);
+        margin-bottom: 20px;
+      }
+
+      .result-card {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        margin-bottom: 20px;
+        box-shadow: var(--shadow);
+        overflow: hidden;
+        animation: slideUp 0.4s ease both;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .rc-top {
+        padding: 22px 24px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+      .rc-top:hover {
+        background: var(--bg);
+      }
+      .rc-emoji {
+        width: 52px;
+        height: 52px;
+        flex-shrink: 0;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        background: var(--surface2);
+      }
+      .rc-info {
+        flex: 1;
+      }
+      .rc-doctor {
+        font-size: 18px;
+        font-weight: 600;
+        color: var(--text);
+        margin-bottom: 2px;
+      }
+      .rc-specialty {
+        font-size: 13px;
+        color: var(--text2);
+        margin-bottom: 8px;
+      }
+      .rc-tags {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .tag {
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .tag-urgent {
+        background: var(--warn-light);
+        color: var(--warn);
+      }
+      .tag-moderate {
+        background: var(--moderate-light);
+        color: #9c6c00;
+      }
+      .tag-routine {
+        background: var(--accent-light);
+        color: var(--accent);
+      }
+      .tag-match {
+        background: var(--bg);
+        color: var(--text2);
+        border: 1px solid var(--border);
+      }
+      .rc-toggle {
+        font-size: 20px;
+        color: var(--text3);
+        flex-shrink: 0;
+        margin-top: 14px;
+        transition: transform 0.3s;
+      }
+      .rc-toggle.open {
+        transform: rotate(180deg);
+      }
+
+      .rc-body {
+        border-top: 1px solid var(--border);
+        padding: 24px;
+        display: none;
+        animation: fadeIn 0.2s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .rc-body.open {
+        display: block;
+      }
+
+      .about-text {
+        font-size: 14px;
+        color: var(--text2);
+        line-height: 1.7;
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        padding: 14px 16px;
+        margin-bottom: 20px;
+      }
+
+      .rc-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      @media (max-width: 600px) {
+        .rc-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .rc-section {
+      }
+      .rc-section-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .rc-section-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: var(--border);
+      }
+
+      .condition-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 0;
+        font-size: 13px;
+        color: var(--text);
+        border-bottom: 1px solid var(--bg);
+      }
+      .cond-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent2);
+        flex-shrink: 0;
+      }
+
+      .tests-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .test-pill {
+        padding: 5px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--text2);
+      }
+
+      .lifestyle-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 5px 0;
+        font-size: 13px;
+        color: var(--text);
+      }
+      .life-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: var(--accent);
+        flex-shrink: 0;
+        margin-top: 8px;
+      }
+
+      .warn-box {
+        background: var(--warn-light);
+        border: 1px solid #f4a261;
+        border-radius: var(--radius-sm);
+        padding: 14px 16px;
+        font-size: 13px;
+        color: #7b3720;
+        line-height: 1.6;
+        margin-top: 16px;
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .warn-icon {
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+
+      /* EMPTY / GENERAL */
+      .gp-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px;
+        text-align: center;
+      }
+      .gp-card h3 {
+        font-family: "DM Serif Display", serif;
+        font-size: 22px;
+        margin-bottom: 8px;
+      }
+      .gp-card p {
+        font-size: 14px;
+        color: var(--text2);
+        line-height: 1.7;
+      }
+
+      /* DISCLAIMER */
+      .disclaimer {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 16px 20px;
+        font-size: 12px;
+        color: var(--text2);
+        line-height: 1.6;
+        margin-top: 32px;
+        text-align: center;
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--surface);
+        border-top: 1px solid var(--border);
+        text-align: center;
+        padding: 20px;
+        font-size: 12px;
+        color: var(--text3);
+      }
+
+      /* MOBILE */
+      @media (max-width: 500px) {
+        .hero h1 {
+          font-size: 28px;
+        }
+        .hero-stats {
+          gap: 20px;
+        }
+        .panel {
+          padding: 20px;
+        }
+        .sel-wrap {
+          padding: 16px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="logo">
+        <div class="logo-icon">🩺</div>
+        <span class="logo-text">Medi<span>Scan</span></span>
+      </div>
+      <span class="header-badge">Not a substitute for medical advice</span>
+    </header>
+
+    <div class="hero">
+      <h1>Find the right doctor<br /><em>for your symptoms</em></h1>
+      <p>
+        Select your symptoms and get matched with the right specialist,
+        recommended tests, and personalised care guidance.
+      </p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">14</div>
+          <div class="hero-stat-lbl">Specialists</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">130+</div>
+          <div class="hero-stat-lbl">Symptoms</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">120+</div>
+          <div class="hero-stat-lbl">Tests covered</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">Free</div>
+          <div class="hero-stat-lbl">Always</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- PATIENT PROFILE -->
+      <div class="profile-wrap">
+        <div class="panel-title">Patient profile</div>
+        <div class="profile-grid">
+          <div class="profile-field">
+            <label>Age</label>
+            <input
+              type="number"
+              id="pat-age"
+              placeholder="e.g. 5"
+              min="0"
+              max="120"
+              oninput="onProfileChange()"
+            />
+            <div id="age-badge" class="age-badge" style="display: none"></div>
+          </div>
+          <div class="profile-field">
+            <label>Weight (kg)</label>
+            <input
+              type="number"
+              id="pat-weight"
+              placeholder="e.g. 60"
+              min="1"
+              max="300"
+              oninput="onProfileChange()"
+            />
+            <div id="bmi-pill" class="bmi-pill" style="display: none"></div>
+          </div>
+          <div class="profile-field">
+            <label
+              >Height (cm)
+              <span style="font-size: 10px; font-weight: 400"
+                >(for BMI)</span
+              ></label
+            >
+            <input
+              type="number"
+              id="pat-height"
+              placeholder="e.g. 170"
+              min="30"
+              max="250"
+              oninput="onProfileChange()"
+            />
+          </div>
+          <div class="profile-field">
+            <label>Gender</label>
+            <select id="pat-gender" onchange="onProfileChange()">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other / Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <div id="profile-note" class="profile-note"></div>
+      </div>
+
+      <!-- SEARCH PANEL -->
+      <div class="panel">
+        <div class="panel-title">Search symptoms</div>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            id="sym-input"
+            placeholder="Type a symptom e.g. chest pain, fever…"
+            autocomplete="off"
+          />
+          <div class="autocomplete" id="autocomplete"></div>
+        </div>
+        <div class="panel-title" style="margin-top: 4px">
+          Common symptoms — tap to select
+        </div>
+        <div class="quick-wrap" id="quick-chips"></div>
+      </div>
+
+      <!-- SEVERITY -->
+      <div class="severity-wrap">
+        <div class="panel-title" style="margin-bottom: 12px">
+          Symptom severity
+        </div>
+        <div class="sev-row">
+          <span class="sev-label">Mild</span>
+          <input
+            type="range"
+            id="severity"
+            min="1"
+            max="10"
+            value="5"
+            step="1"
+          />
+          <span class="sev-label">Severe</span>
+          <span class="sev-val" id="sev-val">Moderate (5/10)</span>
+        </div>
+      </div>
+
+      <!-- SELECTED -->
+      <div class="sel-wrap" id="sel-wrap">
+        <div class="sel-header">
+          <span class="sel-title"
+            >Your symptoms (<span id="sel-count">0</span>)</span
+          >
+          <button class="clear-btn" onclick="clearAll()">Clear all</button>
+        </div>
+        <div class="sel-chips" id="sel-chips"></div>
+        <button class="analyze-btn" id="analyze-btn" onclick="analyze()">
+          <span>🔬</span> Analyze & Find Specialists
+        </button>
+      </div>
+
+      <!-- RESULTS -->
+      <div id="results"></div>
+
+      <div class="disclaimer">
+        ⚕️ <strong>Medical Disclaimer:</strong> MediScan is for informational
+        purposes only and does not constitute medical advice, diagnosis, or
+        treatment. Always consult a qualified healthcare professional. In
+        emergencies, call your local emergency number immediately.
+      </div>
+    </div>
+
+    <footer>
+      MediScan &copy; 2025 &nbsp;·&nbsp; For informational use only
+      &nbsp;·&nbsp; Always consult a licensed physician &nbsp;·&nbsp; Made by
+      Jattin Khajuria with ❤️
+    </footer>
+
+    <script>
+      const allSymptoms = [
+        "Headache",
+        "Fever",
+        "Cough",
+        "Chest pain",
+        "Shortness of breath",
+        "Fatigue",
+        "Nausea",
+        "Vomiting",
+        "Diarrhea",
+        "Abdominal pain",
+        "Back pain",
+        "Joint pain",
+        "Rash",
+        "Sore throat",
+        "Runny nose",
+        "Dizziness",
+        "Blurred vision",
+        "Ear pain",
+        "Toothache",
+        "Heart palpitations",
+        "Swollen lymph nodes",
+        "Frequent urination",
+        "Burning urination",
+        "Blood in urine",
+        "Weight loss",
+        "Night sweats",
+        "Swelling in legs",
+        "Muscle weakness",
+        "Numbness or tingling",
+        "Anxiety",
+        "Depression",
+        "Insomnia",
+        "Skin itching",
+        "Hair loss",
+        "Constipation",
+        "Acid reflux",
+        "Difficulty swallowing",
+        "Jaundice",
+        "Dark urine",
+        "Pale stools",
+        "Irregular periods",
+        "Breast pain",
+        "Testicular pain",
+        "Sexual dysfunction",
+        "Memory loss",
+        "Tremors",
+        "Seizures",
+        "Loss of smell",
+        "Loss of taste",
+        "Eye redness",
+        "Double vision",
+        "Swollen joints",
+        "Mouth ulcers",
+        "Dry mouth",
+        // Newly added
+        "Bloating",
+        "Gas or flatulence",
+        "Rectal bleeding",
+        "Blood in stool",
+        "Excessive thirst",
+        "Sudden weight gain",
+        "Chills",
+        "Cold hands and feet",
+        "Palpitations at rest",
+        "Chest tightness",
+        "Wheezing",
+        "Snoring",
+        "Daytime sleepiness",
+        "Bedwetting",
+        "Frequent infections",
+        "Bruising easily",
+        "Bleeding gums",
+        "Nosebleeds",
+        "Pale skin",
+        "Yellowing of eyes",
+        "Swollen abdomen",
+        "Loss of appetite",
+        "Difficulty concentrating",
+        "Brain fog",
+        "Mood swings",
+        "Irritability",
+        "Panic attacks",
+        "Hallucinations",
+        "Confusion",
+        "Slurred speech",
+        "Facial pain",
+        "Jaw pain",
+        "Neck pain",
+        "Shoulder pain",
+        "Hip pain",
+        "Knee pain",
+        "Heel pain",
+        "Foot numbness",
+        "Leg cramps",
+        "Muscle cramps",
+        "Muscle stiffness",
+        "Painful urination",
+        "Cloudy urine",
+        "Foul-smelling urine",
+        "Vaginal discharge",
+        "Pelvic pain",
+        "Hot flashes",
+        "Excessive sweating",
+        "Reduced sweating",
+        "Swollen face",
+        "Eye discharge",
+        "Eye watering",
+        "Sensitivity to light",
+        "Sensitivity to sound",
+        "Ringing in ears",
+        "Ear discharge",
+        "Nasal congestion",
+        "Post-nasal drip",
+        "Hoarse voice",
+        "Lump in throat",
+        "Swollen tongue",
+        "Cracked lips",
+        "Nail changes",
+        "Brittle nails",
+        "Skin peeling",
+        "Skin dryness",
+        "Excessive thirst",
+        "Increased hunger",
+        "Slow wound healing",
+        "Cold intolerance",
+        "Heat intolerance",
+        "Puffy eyes",
+        "Dark circles",
+        "Unexplained bruises",
+        "Swollen glands",
+        "Groin pain",
+        "Bone pain",
+        "Rib pain",
+        "Jaw clicking",
+        "Teeth grinding",
+        "Poor balance",
+        "Coordination problems",
+        "Fainting",
+        "Near-fainting",
+        "Rapid breathing",
+        "Shallow breathing",
+        "Hiccups",
+        "Belching",
+        "Throat clearing",
+        "Chronic sneezing",
+        "Watery eyes",
+        "Flaking scalp",
+        "Oily skin",
+        "Acne",
+        "Body odour changes",
+        "Urine leakage",
+        "Erectile dysfunction",
+        "Low libido",
+        "Delayed puberty",
+        "Growth problems (children)",
+        "Feeding difficulties (infants)",
+      ];
+
+      const quickList = [
+        "Headache",
+        "Fever",
+        "Chest pain",
+        "Fatigue",
+        "Cough",
+        "Joint pain",
+        "Abdominal pain",
+        "Rash",
+        "Dizziness",
+        "Anxiety",
+        "Frequent urination",
+        "Blurred vision",
+        "Back pain",
+        "Shortness of breath",
+        "Irregular periods",
+        "Nausea",
+        "Skin itching",
+        "Heart palpitations",
+        "Bloating",
+        "Insomnia",
+        "Weight loss",
+        "Swollen joints",
+        "Pale skin",
+        "Nosebleeds",
+        "Mood swings",
+        "Cold hands and feet",
+        "Wheezing",
+        "Neck pain",
+        "Pelvic pain",
+        "Hoarse voice",
+      ];
+
+      const gpSymptoms = [
+        "Headache",
+        "Fever",
+        "Cough",
+        "Fatigue",
+        "Nausea",
+        "Vomiting",
+        "Diarrhea",
+        "Runny nose",
+        "Sore throat",
+        "Body ache",
+        "Loss of appetite",
+        "Chills",
+        "Weakness",
+        "Mild rash",
+        "Cold hands and feet",
+        "Bloating",
+        "Constipation",
+        "Dizziness",
+        "Insomnia",
+        "Weight loss",
+        "Night sweats",
+        "Back pain",
+        "Abdominal pain",
+        "Sneezing",
+        "Post-nasal drip",
+        "Watery eyes",
+        "Throat clearing",
+        "Chronic sneezing",
+        "Hiccups",
+        "Gas or flatulence",
+        "Belching",
+      ];
+
+      const db = [
+        {
+          icon: "🩺",
+          doctor: "General Physician (GP)",
+          specialty: "First Point of Contact — All Common Illnesses",
+          symptoms: [
+            "Headache",
+            "Fever",
+            "Cough",
+            "Fatigue",
+            "Nausea",
+            "Vomiting",
+            "Diarrhea",
+            "Runny nose",
+            "Sore throat",
+            "Chills",
+            "Loss of appetite",
+            "Body ache",
+            "Weakness",
+            "Mild rash",
+            "Bloating",
+            "Constipation",
+            "Dizziness",
+            "Insomnia",
+            "Weight loss",
+            "Night sweats",
+            "Back pain",
+            "Abdominal pain",
+            "Cold hands and feet",
+            "Sneezing",
+            "Post-nasal drip",
+            "Watery eyes",
+            "Gas or flatulence",
+            "Belching",
+            "Hiccups",
+            "Throat clearing",
+          ],
+          urgency: "routine",
+          urgencyText: "See GP first",
+          isPrimary: true,
+          about:
+            "A General Physician is your first and most important point of contact for any health concern. They can diagnose and treat most common illnesses directly, order initial investigations, and refer you to the right specialist when needed. Always start here for common symptoms.",
+          possible: [
+            "Viral fever / Influenza",
+            "Common cold / URI",
+            "Gastroenteritis",
+            "Tension headache",
+            "Migraine",
+            "Anaemia",
+            "Dehydration",
+            "Vitamin deficiencies (B12, D3, Iron)",
+            "Hypothyroidism",
+            "Hypertension",
+            "Diabetes mellitus",
+            "Acid peptic disease",
+            "IBS",
+            "Anxiety / Stress-related illness",
+            "Dengue / Malaria / Typhoid (if febrile)",
+          ],
+          tests: [
+            "Complete blood count (CBC)",
+            "ESR & CRP (infection / inflammation)",
+            "Blood sugar — fasting & post-meal",
+            "Thyroid profile (TSH)",
+            "Serum B12, Folate & Vitamin D3",
+            "Urine routine & microscopy",
+            "Dengue NS1 antigen & antibody (if febrile)",
+            "Malaria rapid antigen test",
+            "Widal test (typhoid)",
+            "Liver function tests (LFT)",
+            "Lipid profile",
+            "Chest X-ray (if cough persists)",
+            "Stool routine & culture",
+          ],
+          lifestyle: [
+            "Stay well hydrated — 2.5–3 litres of water daily",
+            "Eat balanced, home-cooked meals",
+            "Maintain a regular sleep schedule",
+            "Avoid self-medication and overuse of antibiotics",
+            "Light exercise and stress management",
+            "Regular annual health check-up after age 30",
+          ],
+          warn: "Go to emergency for very high fever (above 104°F / 40°C), difficulty breathing, persistent vomiting, signs of dehydration (no urine for 8+ hrs), or sudden severe pain anywhere.",
+        },
+        {
+          icon: "🫀",
+          doctor: "Cardiologist",
+          specialty: "Heart & Cardiovascular System",
+          symptoms: [
+            "Chest pain",
+            "Heart palpitations",
+            "Shortness of breath",
+            "Swelling in legs",
+            "Fatigue",
+            "Dizziness",
+            "Nausea",
+            "Chest tightness",
+            "Palpitations at rest",
+            "Cold hands and feet",
+            "Excessive sweating",
+            "Fainting",
+            "Near-fainting",
+            "Rapid breathing",
+          ],
+          urgency: "urgent",
+          urgencyText: "Seek care promptly",
+          about:
+            "A cardiologist specialises in diagnosing and treating conditions of the heart and blood vessels. Any chest pain or palpitations should be evaluated without delay.",
+          possible: [
+            "Coronary artery disease",
+            "Arrhythmia (irregular heartbeat)",
+            "Heart failure",
+            "Hypertension",
+            "Angina pectoris",
+            "Myocarditis",
+            "Valvular heart disease",
+            "Pericarditis",
+          ],
+          tests: [
+            "ECG (Electrocardiogram)",
+            "Echocardiogram",
+            "Stress test (TMT)",
+            "Holter monitor 24–48 hr",
+            "Troponin & CK-MB (cardiac enzymes)",
+            "Lipid profile (cholesterol)",
+            "Complete blood count (CBC)",
+            "Chest X-ray",
+            "CT coronary angiography",
+            "Coronary catheterization (if needed)",
+          ],
+          lifestyle: [
+            "Stop smoking immediately",
+            "Follow a heart-healthy low-sodium diet",
+            "30 min moderate exercise daily (if cleared)",
+            "Manage stress — yoga & meditation",
+            "Monitor blood pressure at home",
+            "Limit caffeine and alcohol",
+          ],
+          warn: "If chest pain is severe, radiates to left arm or jaw, with sweating or breathlessness — call emergency services (108/112) immediately. Do not drive yourself.",
+        },
+        {
+          icon: "🫁",
+          doctor: "Pulmonologist",
+          specialty: "Lungs & Respiratory System",
+          symptoms: [
+            "Cough",
+            "Shortness of breath",
+            "Chest pain",
+            "Fatigue",
+            "Night sweats",
+            "Weight loss",
+            "Loss of smell",
+            "Loss of taste",
+            "Wheezing",
+            "Chest tightness",
+            "Snoring",
+            "Daytime sleepiness",
+            "Rapid breathing",
+            "Shallow breathing",
+            "Hoarse voice",
+            "Chronic sneezing",
+          ],
+          urgency: "moderate",
+          urgencyText: "See within a few days",
+          about:
+            "A pulmonologist diagnoses and treats lung and breathing conditions including asthma, COPD, TB, pneumonia and sleep disorders.",
+          possible: [
+            "Asthma",
+            "COPD / Emphysema",
+            "Pneumonia",
+            "Tuberculosis (TB)",
+            "Bronchitis",
+            "Pleural effusion",
+            "Obstructive sleep apnea",
+            "Lung fibrosis",
+            "Lung cancer (rule out)",
+          ],
+          tests: [
+            "Spirometry (lung function)",
+            "Chest X-ray",
+            "HRCT chest",
+            "Sputum culture & AFB smear",
+            "ABG (Arterial Blood Gas)",
+            "Peak flow measurement",
+            "Pulse oximetry (SpO₂)",
+            "Bronchoscopy (if indicated)",
+            "Mantoux / TB skin test",
+            "Allergy panel (IgE, RAST)",
+          ],
+          lifestyle: [
+            "Avoid smoke, dust, and pollution",
+            "Stay well hydrated",
+            "Breathing exercises (diaphragmatic)",
+            "Use N95 mask in polluted areas",
+            "Keep home well-ventilated",
+            "Maintain healthy weight",
+          ],
+          warn: "Call emergency services if you experience sudden severe breathlessness, coughing blood, or notice blue lips or fingertips (cyanosis).",
+        },
+        {
+          icon: "🫃",
+          doctor: "Gastroenterologist",
+          specialty: "Digestive System & Liver",
+          symptoms: [
+            "Abdominal pain",
+            "Nausea",
+            "Vomiting",
+            "Diarrhea",
+            "Constipation",
+            "Acid reflux",
+            "Jaundice",
+            "Dark urine",
+            "Pale stools",
+            "Difficulty swallowing",
+            "Weight loss",
+            "Bloating",
+            "Gas or flatulence",
+            "Rectal bleeding",
+            "Blood in stool",
+            "Swollen abdomen",
+            "Loss of appetite",
+            "Belching",
+            "Hiccups",
+          ],
+          urgency: "moderate",
+          urgencyText: "See within a week",
+          about:
+            "A gastroenterologist specialises in the entire digestive tract — oesophagus, stomach, intestines, liver, pancreas and gallbladder.",
+          possible: [
+            "GERD / Acid peptic disease",
+            "Irritable Bowel Syndrome (IBS)",
+            "Peptic ulcer disease",
+            "Hepatitis A / B / C",
+            "Gallstones",
+            "Crohn's disease / Ulcerative colitis",
+            "Pancreatitis",
+            "Celiac disease",
+            "Colorectal disorders",
+          ],
+          tests: [
+            "Upper GI endoscopy (OGD scopy)",
+            "Colonoscopy",
+            "Abdominal ultrasound",
+            "Liver function tests (LFT)",
+            "Stool routine, culture & occult blood",
+            "H. pylori breath test / stool antigen",
+            "HIDA scan (gallbladder function)",
+            "MRI abdomen",
+            "Serum amylase & lipase",
+            "Biopsy (if lesion found)",
+          ],
+          lifestyle: [
+            "Eat small, frequent meals",
+            "Avoid spicy, oily, and processed foods",
+            "Drink 2–3 litres of water daily",
+            "No meals within 2 hrs of sleeping",
+            "Limit alcohol strictly",
+            "Increase dietary fibre intake",
+          ],
+          warn: "Seek emergency care for blood in vomit, black tarry stools, sudden severe abdominal pain, or rapidly worsening jaundice.",
+        },
+        {
+          icon: "🧠",
+          doctor: "Neurologist",
+          specialty: "Brain, Spinal Cord & Nerves",
+          symptoms: [
+            "Headache",
+            "Dizziness",
+            "Numbness or tingling",
+            "Muscle weakness",
+            "Tremors",
+            "Seizures",
+            "Memory loss",
+            "Blurred vision",
+            "Fatigue",
+            "Double vision",
+            "Brain fog",
+            "Difficulty concentrating",
+            "Confusion",
+            "Slurred speech",
+            "Poor balance",
+            "Coordination problems",
+            "Fainting",
+            "Sensitivity to light",
+            "Sensitivity to sound",
+            "Facial pain",
+          ],
+          urgency: "moderate",
+          urgencyText: "Book appointment soon",
+          about:
+            "A neurologist diagnoses and treats conditions of the brain, spinal cord, and peripheral nerves — from migraines to epilepsy, stroke, and neurodegenerative diseases.",
+          possible: [
+            "Migraine / Cluster headache",
+            "Epilepsy",
+            "Parkinson's disease",
+            "Multiple sclerosis",
+            "Peripheral neuropathy",
+            "Stroke or TIA (rule out)",
+            "Alzheimer's / Dementia",
+            "Guillain-Barré syndrome",
+          ],
+          tests: [
+            "MRI brain with & without contrast",
+            "CT brain (emergency)",
+            "EEG (electroencephalogram)",
+            "Nerve conduction study (NCS) & EMG",
+            "Lumbar puncture (CSF analysis)",
+            "Serum B12 & folate",
+            "Thyroid function test (TFT)",
+            "Carotid Doppler ultrasound",
+            "Neuropsychological assessment",
+            "Vitamin D & homocysteine levels",
+          ],
+          lifestyle: [
+            "Maintain regular sleep schedule (7–8 hrs)",
+            "Mental exercises — puzzles, reading, chess",
+            "Avoid migraine triggers (bright light, stress, caffeine)",
+            "Stay hydrated — dehydration triggers headaches",
+            "Physical therapy for weakness/balance",
+            "Avoid alcohol & recreational drugs",
+          ],
+          warn: "Call 108 immediately for: sudden worst headache of life, facial drooping, arm weakness, slurred speech, or sudden vision loss — these are stroke warning signs.",
+        },
+        {
+          icon: "🧴",
+          doctor: "Dermatologist",
+          specialty: "Skin, Hair & Nails",
+          symptoms: [
+            "Rash",
+            "Skin itching",
+            "Hair loss",
+            "Jaundice",
+            "Swollen lymph nodes",
+            "Mouth ulcers",
+            "Dry mouth",
+            "Acne",
+            "Skin peeling",
+            "Skin dryness",
+            "Nail changes",
+            "Brittle nails",
+            "Flaking scalp",
+            "Oily skin",
+            "Excessive sweating",
+            "Reduced sweating",
+            "Body odour changes",
+            "Bruising easily",
+            "Slow wound healing",
+            "Yellowing of eyes",
+          ],
+          urgency: "routine",
+          urgencyText: "Routine appointment",
+          about:
+            "A dermatologist treats all conditions affecting the skin, hair, and nails — from infections and autoimmune disorders to cosmetic concerns and skin cancer screening.",
+          possible: [
+            "Eczema / Atopic dermatitis",
+            "Psoriasis",
+            "Urticaria (hives)",
+            "Tinea (fungal infection)",
+            "Alopecia areata",
+            "Contact dermatitis",
+            "Seborrheic dermatitis",
+            "Vitiligo",
+          ],
+          tests: [
+            "Skin patch test (allergens)",
+            "KOH mount (fungal scraping)",
+            "Skin biopsy",
+            "Complete blood count (CBC)",
+            "Total IgE & specific allergen panel",
+            "Thyroid profile (T3, T4, TSH)",
+            "ANA / Anti-dsDNA (autoimmune)",
+            "Dermoscopy",
+            "Wood's lamp examination",
+            "Culture & sensitivity (bacterial)",
+          ],
+          lifestyle: [
+            "Moisturise skin twice daily",
+            "Use SPF 30+ sunscreen every day",
+            "Use mild, fragrance-free soaps",
+            "Avoid scratching — it worsens rash",
+            "Eat zinc-rich & biotin-rich foods",
+            "Drink adequate water daily",
+          ],
+          warn: "Consult urgently if a mole changes shape, size or colour; a wound won't heal for weeks; or a rash spreads rapidly with high fever.",
+        },
+        {
+          icon: "🫘",
+          doctor: "Urologist / Nephrologist",
+          specialty: "Kidneys, Bladder & Urinary Tract",
+          symptoms: [
+            "Frequent urination",
+            "Burning urination",
+            "Blood in urine",
+            "Abdominal pain",
+            "Swelling in legs",
+            "Fatigue",
+            "Sexual dysfunction",
+            "Testicular pain",
+            "Painful urination",
+            "Cloudy urine",
+            "Foul-smelling urine",
+            "Groin pain",
+            "Urine leakage",
+            "Erectile dysfunction",
+            "Low libido",
+            "Pelvic pain",
+          ],
+          urgency: "moderate",
+          urgencyText: "See within a few days",
+          about:
+            "Urologists manage urinary tract conditions while nephrologists treat kidney diseases. Blood in urine or burning sensation should be evaluated promptly.",
+          possible: [
+            "Urinary tract infection (UTI)",
+            "Kidney stones (renal calculi)",
+            "Chronic kidney disease (CKD)",
+            "Benign prostatic hyperplasia (men)",
+            "Bladder infection / overactive bladder",
+            "Glomerulonephritis",
+            "Kidney cancer (rule out)",
+          ],
+          tests: [
+            "Urine routine & microscopy",
+            "Urine culture & sensitivity",
+            "Serum creatinine, BUN, uric acid",
+            "eGFR (estimated kidney function)",
+            "Ultrasound — kidneys, ureters, bladder (KUB)",
+            "24-hour urine protein",
+            "PSA test (men over 50)",
+            "Cystoscopy (if indicated)",
+            "KUB X-ray / CT urogram",
+            "Renal biopsy (if CKD suspected)",
+          ],
+          lifestyle: [
+            "Drink 2.5–3 litres water daily",
+            "Never suppress the urge to urinate",
+            "Low-salt, low-phosphorus diet (for kidney disease)",
+            "Avoid NSAIDs (ibuprofen) — damage kidneys",
+            "Limit red meat and processed foods",
+            "Cranberry juice — may help prevent UTIs",
+          ],
+          warn: "Go to emergency for severe flank pain with vomiting (kidney stone), inability to urinate at all, or large blood clots in urine.",
+        },
+        {
+          icon: "👂",
+          doctor: "ENT Specialist (Otolaryngologist)",
+          specialty: "Ear, Nose & Throat",
+          symptoms: [
+            "Ear pain",
+            "Sore throat",
+            "Runny nose",
+            "Loss of smell",
+            "Loss of taste",
+            "Dizziness",
+            "Headache",
+            "Swollen lymph nodes",
+            "Difficulty swallowing",
+            "Nasal congestion",
+            "Post-nasal drip",
+            "Hoarse voice",
+            "Lump in throat",
+            "Ringing in ears",
+            "Ear discharge",
+            "Throat clearing",
+            "Facial pain",
+            "Snoring",
+            "Jaw pain",
+            "Watery eyes",
+          ],
+          urgency: "routine",
+          urgencyText: "Routine appointment",
+          about:
+            "An ENT specialist treats disorders of the ears, nose, throat, sinuses, and related structures of the head and neck.",
+          possible: [
+            "Sinusitis (acute / chronic)",
+            "Tonsillitis / Pharyngitis",
+            "Otitis media (ear infection)",
+            "BPPV / Ménière's disease (vertigo)",
+            "Allergic rhinitis",
+            "Deviated nasal septum",
+            "Vocal cord disorders",
+            "Obstructive sleep apnea",
+          ],
+          tests: [
+            "Throat swab culture & sensitivity",
+            "Pure-tone audiometry (hearing test)",
+            "Tympanometry",
+            "Nasal endoscopy",
+            "CT sinuses (paranasal)",
+            "Allergen-specific IgE (allergy panel)",
+            "Laryngoscopy (voice issues)",
+            "CBC, ESR, CRP",
+            "Temporal bone CT (ear)",
+          ],
+          lifestyle: [
+            "Steam inhalation for nasal congestion",
+            "Saline nasal rinse (Jala Neti)",
+            "Avoid allergens, smoke, and dust",
+            "Stay well hydrated",
+            "Warm salt water gargles for throat",
+            "Use earplugs in noisy environments",
+          ],
+          warn: "Seek urgent care for sudden hearing loss, difficulty breathing or swallowing, a rapidly growing neck lump, or stridor (noisy breathing).",
+        },
+        {
+          icon: "🦴",
+          doctor: "Orthopaedician / Rheumatologist",
+          specialty: "Bones, Joints & Muscles",
+          symptoms: [
+            "Joint pain",
+            "Back pain",
+            "Muscle weakness",
+            "Swelling in legs",
+            "Fatigue",
+            "Numbness or tingling",
+            "Swollen joints",
+            "Neck pain",
+            "Shoulder pain",
+            "Hip pain",
+            "Knee pain",
+            "Heel pain",
+            "Foot numbness",
+            "Leg cramps",
+            "Muscle cramps",
+            "Muscle stiffness",
+            "Bone pain",
+            "Rib pain",
+            "Poor balance",
+            "Coordination problems",
+          ],
+          urgency: "routine",
+          urgencyText: "Routine appointment",
+          about:
+            "An orthopaedician treats structural bone and joint problems. A rheumatologist manages inflammatory and autoimmune conditions like rheumatoid arthritis and lupus.",
+          possible: [
+            "Osteoarthritis",
+            "Rheumatoid arthritis",
+            "Gout",
+            "Lumbar disc herniation",
+            "Ankylosing spondylitis",
+            "Fibromyalgia",
+            "Osteoporosis",
+            "Lupus (SLE)",
+            "Sports injuries",
+          ],
+          tests: [
+            "X-ray of affected joints / spine",
+            "MRI joint or spine",
+            "Serum uric acid",
+            "Rheumatoid factor (RF) & Anti-CCP",
+            "ESR & CRP (inflammation)",
+            "ANA & anti-dsDNA (autoimmune)",
+            "Bone density scan (DEXA)",
+            "Vitamin D3 & Calcium levels",
+            "Synovial fluid analysis",
+            "CBC & metabolic panel",
+          ],
+          lifestyle: [
+            "Low-impact exercise — swimming, yoga, walking",
+            "Maintain healthy body weight",
+            "Calcium & Vitamin D3 supplementation",
+            "Apply hot/cold compress for pain relief",
+            "Ergonomic workplace setup",
+            "Physiotherapy for strengthening",
+          ],
+          warn: "Seek immediate care if a joint is hot, swollen, red, and you have fever — this may be septic arthritis, a medical emergency.",
+        },
+        {
+          icon: "⚗️",
+          doctor: "Endocrinologist",
+          specialty: "Hormones, Diabetes & Metabolism",
+          symptoms: [
+            "Weight loss",
+            "Fatigue",
+            "Night sweats",
+            "Frequent urination",
+            "Hair loss",
+            "Depression",
+            "Anxiety",
+            "Irregular periods",
+            "Sexual dysfunction",
+            "Swelling in legs",
+            "Constipation",
+            "Tremors",
+            "Excessive thirst",
+            "Sudden weight gain",
+            "Cold intolerance",
+            "Heat intolerance",
+            "Hot flashes",
+            "Excessive sweating",
+            "Puffy eyes",
+            "Increased hunger",
+            "Slow wound healing",
+            "Brain fog",
+            "Low libido",
+          ],
+          urgency: "routine",
+          urgencyText: "Routine appointment",
+          about:
+            "An endocrinologist specialises in hormonal systems — managing diabetes, thyroid disorders, adrenal diseases, PCOS, and metabolic conditions.",
+          possible: [
+            "Type 2 Diabetes mellitus",
+            "Hypothyroidism",
+            "Hyperthyroidism / Graves' disease",
+            "Polycystic Ovarian Syndrome (PCOS)",
+            "Adrenal insufficiency",
+            "Cushing's syndrome",
+            "Metabolic syndrome",
+          ],
+          tests: [
+            "Fasting blood glucose & post-meal glucose",
+            "HbA1c (3-month blood sugar average)",
+            "Thyroid profile (TSH, Free T3, Free T4)",
+            "Fasting insulin level",
+            "Serum cortisol (morning)",
+            "Testosterone / Estradiol / Progesterone",
+            "FSH, LH, Prolactin",
+            "Adrenal CT / MRI",
+            "24-hour urine cortisol",
+            "Bone density scan (DEXA)",
+          ],
+          lifestyle: [
+            "Balanced diet — limit refined sugar and white rice",
+            "30 min exercise daily minimum",
+            "Strict sleep schedule — 7–8 hours",
+            "Regular blood sugar monitoring",
+            "Stress management techniques",
+            "Avoid self-medicating hormonal issues",
+          ],
+          warn: "Call emergency for diabetic ketoacidosis signs (extreme thirst, rapid breathing, fruity breath, confusion) or thyroid storm (very high fever, rapid heart rate, confusion).",
+        },
+        {
+          icon: "🧘",
+          doctor: "Psychiatrist / Psychologist",
+          specialty: "Mental Health & Wellbeing",
+          symptoms: [
+            "Anxiety",
+            "Depression",
+            "Insomnia",
+            "Fatigue",
+            "Memory loss",
+            "Tremors",
+            "Weight loss",
+            "Hair loss",
+            "Sexual dysfunction",
+            "Mood swings",
+            "Irritability",
+            "Panic attacks",
+            "Hallucinations",
+            "Confusion",
+            "Brain fog",
+            "Difficulty concentrating",
+            "Loss of appetite",
+            "Excessive sweating",
+            "Daytime sleepiness",
+            "Low libido",
+          ],
+          urgency: "moderate",
+          urgencyText: "Book soon — you are not alone",
+          about:
+            "A psychiatrist is a medical doctor who can prescribe medication for mental health. A psychologist provides evidence-based therapy. Both work together for best outcomes.",
+          possible: [
+            "Major depressive disorder",
+            "Generalised anxiety disorder (GAD)",
+            "Panic disorder",
+            "Post-traumatic stress disorder (PTSD)",
+            "Obsessive-compulsive disorder (OCD)",
+            "Bipolar disorder",
+            "Schizophrenia spectrum",
+          ],
+          tests: [
+            "PHQ-9 (depression screening)",
+            "GAD-7 (anxiety screening)",
+            "Thyroid profile (rule out organic cause)",
+            "CBC & serum B12 / folate",
+            "Sleep study (polysomnography)",
+            "Neuropsychological battery",
+            "MRI brain (if structural cause suspected)",
+            "Cortisol levels",
+            "Substance use screening",
+          ],
+          lifestyle: [
+            "Daily physical activity — proven antidepressant",
+            "Mindfulness-based stress reduction (MBSR)",
+            "Maintain social connections — don't isolate",
+            "Limit social media & screen time",
+            "Structured daily routine with set sleep times",
+            "Journaling and creative expression",
+          ],
+          warn: "If you or someone you know is experiencing thoughts of self-harm or suicide, please call iCall helpline: 9152987821 or emergency services. Help is available and recovery is possible.",
+        },
+        {
+          icon: "🌸",
+          doctor: "Gynaecologist / Obstetrician",
+          specialty: "Women's Reproductive Health",
+          symptoms: [
+            "Irregular periods",
+            "Breast pain",
+            "Abdominal pain",
+            "Weight loss",
+            "Night sweats",
+            "Fatigue",
+            "Frequent urination",
+            "Mood swings",
+            "Pelvic pain",
+            "Vaginal discharge",
+            "Hot flashes",
+            "Low libido",
+            "Bloating",
+            "Swollen abdomen",
+            "Hair loss",
+            "Acne",
+            "Excessive thirst",
+          ],
+          urgency: "moderate",
+          urgencyText: "Book within a week",
+          about:
+            "A gynaecologist specialises in the female reproductive system. Regular screenings and check-ups are essential for long-term reproductive and hormonal health.",
+          possible: [
+            "Polycystic Ovarian Syndrome (PCOS)",
+            "Endometriosis",
+            "Uterine fibroids",
+            "Ovarian cysts",
+            "Perimenopause / Menopause",
+            "Cervical dysplasia",
+            "Breast disorders",
+            "Ectopic pregnancy",
+          ],
+          tests: [
+            "Pap smear (cervical cancer screening)",
+            "Pelvic ultrasound (TVS / TAS)",
+            "Mammography & breast ultrasound",
+            "Hormonal panel (FSH, LH, Estradiol)",
+            "Thyroid profile",
+            "CBC & serum ferritin (iron stores)",
+            "CA-125 (ovarian cancer marker)",
+            "Beta-hCG (pregnancy test)",
+            "Progesterone levels",
+            "Bone density (DEXA) for menopause",
+          ],
+          lifestyle: [
+            "Annual gynaecological check-up",
+            "Track your menstrual cycle (use an app)",
+            "Healthy weight — obesity worsens PCOS",
+            "Calcium-rich diet for bone health",
+            "Monthly self-breast examination",
+            "HPV vaccination if not done",
+          ],
+          warn: "Seek immediate care for sudden heavy bleeding, severe pelvic pain, missed period with possibility of pregnancy, or any lump in the breast.",
+        },
+        {
+          icon: "👁️",
+          doctor: "Ophthalmologist",
+          specialty: "Eyes & Vision",
+          symptoms: [
+            "Blurred vision",
+            "Headache",
+            "Dizziness",
+            "Fatigue",
+            "Eye redness",
+            "Double vision",
+            "Eye discharge",
+            "Eye watering",
+            "Sensitivity to light",
+            "Dark circles",
+            "Puffy eyes",
+            "Dry mouth",
+            "Watery eyes",
+            "Facial pain",
+          ],
+          urgency: "routine",
+          urgencyText: "Get checked soon",
+          about:
+            "An ophthalmologist is a medical doctor specialising in eye diseases. Many serious conditions like glaucoma and diabetic retinopathy have no early symptoms — regular check-ups are vital.",
+          possible: [
+            "Refractive error (myopia / hyperopia / astigmatism)",
+            "Glaucoma",
+            "Cataract",
+            "Diabetic retinopathy",
+            "Age-related macular degeneration",
+            "Conjunctivitis",
+            "Uveitis",
+            "Dry eye syndrome",
+          ],
+          tests: [
+            "Visual acuity test (Snellen chart)",
+            "Slit-lamp biomicroscopy",
+            "Intraocular pressure (applanation tonometry)",
+            "Dilated fundus examination",
+            "OCT scan (retinal layers)",
+            "Visual field test (perimetry)",
+            "Fluorescein angiography (retinal blood flow)",
+            "Blood sugar (diabetic retinopathy screen)",
+            "Corneal topography",
+          ],
+          lifestyle: [
+            "Follow 20-20-20 rule for screen use",
+            "Wear 100% UV-blocking sunglasses outdoors",
+            "Eat leafy greens — lutein for eye health",
+            "Never rub your eyes aggressively",
+            "Annual eye exam after age 40",
+            "Control blood sugar and blood pressure",
+          ],
+          warn: "Go to emergency immediately for sudden vision loss, a curtain or veil over vision, flashes of light, or chemical splash in eye.",
+        },
+        {
+          icon: "🩸",
+          doctor: "Haematologist",
+          specialty: "Blood Disorders & Immune System",
+          symptoms: [
+            "Fatigue",
+            "Pale skin",
+            "Bruising easily",
+            "Bleeding gums",
+            "Nosebleeds",
+            "Frequent infections",
+            "Weight loss",
+            "Night sweats",
+            "Swollen lymph nodes",
+            "Unexplained bruises",
+            "Bone pain",
+            "Shortness of breath",
+            "Dizziness",
+            "Rapid breathing",
+            "Yellowing of eyes",
+            "Dark urine",
+            "Cold hands and feet",
+            "Rectal bleeding",
+            "Blood in stool",
+            "Chills",
+          ],
+          urgency: "moderate",
+          urgencyText: "See within a few days",
+          about:
+            "A haematologist specialises in disorders of the blood, bone marrow, and lymphatic system — including anaemia, clotting disorders, leukaemia, and lymphoma. Many blood conditions are very treatable when caught early.",
+          possible: [
+            "Iron-deficiency anaemia",
+            "Vitamin B12 / Folate deficiency anaemia",
+            "Thalassaemia",
+            "Sickle cell disease",
+            "Thrombocytopenia (low platelets)",
+            "Deep vein thrombosis (DVT)",
+            "Leukaemia (rule out)",
+            "Lymphoma (rule out)",
+            "Haemophilia",
+            "Polycythaemia vera",
+            "Myeloma",
+          ],
+          tests: [
+            "Complete blood count (CBC) with differential",
+            "Peripheral blood smear",
+            "Serum ferritin, iron & TIBC",
+            "Serum B12 & folate",
+            "Reticulocyte count",
+            "Haemoglobin electrophoresis (thalassaemia screen)",
+            "Bone marrow biopsy (if indicated)",
+            "PT / INR & aPTT (clotting)",
+            "LDH & uric acid",
+            "Flow cytometry",
+            "CT / PET scan (lymphoma work-up)",
+          ],
+          lifestyle: [
+            "Iron-rich diet — leafy greens, lentils, meat",
+            "Pair iron foods with Vitamin C for absorption",
+            "Avoid tea/coffee immediately after meals",
+            "Stay hydrated and active",
+            "Avoid NSAIDs if platelet count is low",
+            "Regular follow-up blood counts",
+          ],
+          warn: "Seek emergency care for uncontrolled bleeding, a sudden very large bruise, extremely high or low platelet count, or any lump that grows rapidly in neck, armpit, or groin.",
+        },
+        {
+          icon: "👶",
+          doctor: "Paediatrician",
+          specialty: "Child & Infant Health (0–18 years)",
+          symptoms: [
+            "Fever",
+            "Cough",
+            "Fatigue",
+            "Rash",
+            "Diarrhea",
+            "Vomiting",
+            "Frequent infections",
+            "Bedwetting",
+            "Growth problems (children)",
+            "Feeding difficulties (infants)",
+            "Delayed puberty",
+            "Wheezing",
+            "Ear pain",
+            "Sore throat",
+            "Runny nose",
+            "Abdominal pain",
+            "Loss of appetite",
+            "Seizures",
+            "Daytime sleepiness",
+            "Chills",
+          ],
+          urgency: "moderate",
+          urgencyText: "Book appointment soon",
+          about:
+            "A paediatrician is a medical doctor specialising in the health of infants, children, and adolescents. They manage everything from routine immunisations and growth monitoring to complex childhood illnesses.",
+          possible: [
+            "Viral fever / Upper respiratory infection",
+            "Acute gastroenteritis",
+            "Asthma in children",
+            "Allergic rhinitis",
+            "Urinary tract infection (UTI)",
+            "Tonsillitis",
+            "Otitis media (ear infection)",
+            "Febrile seizures",
+            "Attention deficit disorder (ADHD)",
+            "Nutritional deficiencies",
+            "Childhood diabetes (Type 1)",
+            "Autism spectrum disorder (ASD)",
+          ],
+          tests: [
+            "CBC with differential",
+            "CRP & ESR (infection markers)",
+            "Urine routine & culture",
+            "Blood sugar (fasting & post-meal)",
+            "Thyroid profile (growth issues)",
+            "Chest X-ray (recurrent cough)",
+            "Stool routine & culture",
+            "Developmental screening tools (DENVER II)",
+            "Hearing and vision screening",
+            "Allergy panel (IgE)",
+            "Growth chart assessment",
+          ],
+          lifestyle: [
+            "Ensure complete vaccination schedule (IAP guidelines)",
+            "Balanced meals with fruits, vegetables, dairy",
+            "Minimum 60 min outdoor physical activity daily",
+            "Limit screen time per age guidelines",
+            "Adequate sleep — 10–14 hrs for young children",
+            "Regular dental and eye check-ups",
+          ],
+          warn: "Take your child to emergency immediately for high fever (above 104°F / 40°C), difficulty breathing, stiff neck, prolonged seizure, unresponsiveness, or a rash that does not blanch on pressure.",
+        },
+      ];
+
+      // ── Patient Profile Helpers ──────────────────────────────────────────────
+
+      function getAgeGroup(age) {
+        if (age === null || age === "") return null;
+        age = parseFloat(age);
+        if (isNaN(age)) return null;
+        if (age < 0.083)
+          return { key: "newborn", label: "Newborn (0–1 month)", icon: "🍼" };
+        if (age < 1)
+          return { key: "infant", label: "Infant (1–11 months)", icon: "🍼" };
+        if (age < 2)
+          return { key: "toddler", label: "Toddler (1–2 years)", icon: "🧒" };
+        if (age < 6)
+          return {
+            key: "preschool",
+            label: "Young child (2–5 yrs)",
+            icon: "🧒",
+          };
+        if (age < 13)
+          return { key: "child", label: "Child (6–12 years)", icon: "🧒" };
+        if (age < 18)
+          return { key: "teen", label: "Teenager (13–17 yrs)", icon: "🧑" };
+        if (age < 40)
+          return { key: "adult", label: "Young adult (18–39)", icon: "🧑" };
+        if (age < 60)
+          return { key: "middleage", label: "Middle-aged (40–59)", icon: "🧑" };
+        return { key: "senior", label: "Senior (60+)", icon: "🧓" };
+      }
+
+      function calcBMI(weight, height) {
+        if (!weight || !height) return null;
+        const h = height / 100;
+        return (weight / (h * h)).toFixed(1);
+      }
+
+      function bmiCategory(bmi, ageGroup) {
+        // For children we just flag, full paediatric charts not included
+        if (!bmi) return null;
+        const b = parseFloat(bmi);
+        if (b < 18.5)
+          return { label: `BMI ${bmi} — Underweight`, cls: "bmi-under" };
+        if (b < 25) return { label: `BMI ${bmi} — Normal`, cls: "bmi-normal" };
+        if (b < 30)
+          return { label: `BMI ${bmi} — Overweight`, cls: "bmi-over" };
+        return { label: `BMI ${bmi} — Obese`, cls: "bmi-obese" };
+      }
+
+      function onProfileChange() {
+        const age = document.getElementById("pat-age").value;
+        const weight = parseFloat(document.getElementById("pat-weight").value);
+        const height = parseFloat(document.getElementById("pat-height").value);
+        const gender = document.getElementById("pat-gender").value;
+
+        // Age badge
+        const ag = getAgeGroup(age);
+        const ageBadge = document.getElementById("age-badge");
+        if (ag) {
+          ageBadge.style.display = "inline-block";
+          ageBadge.textContent = ag.icon + " " + ag.label;
+        } else {
+          ageBadge.style.display = "none";
+        }
+
+        // BMI pill
+        const bmi = calcBMI(weight, height);
+        const bmiPill = document.getElementById("bmi-pill");
+        if (bmi) {
+          const cat = bmiCategory(bmi, ag);
+          bmiPill.style.display = "inline-block";
+          bmiPill.textContent = cat.label;
+          bmiPill.className = "bmi-pill " + cat.cls;
+        } else {
+          bmiPill.style.display = "none";
+        }
+
+        // Profile note
+        const note = document.getElementById("profile-note");
+        const notes = [];
+        if (ag) {
+          if (ag.key === "newborn")
+            notes.push(
+              "🔴 <strong>Newborn:</strong> Always consult a <strong>Neonatologist</strong> or <strong>Paediatrician</strong> immediately for any symptoms. Do not self-manage.",
+            );
+          else if (ag.key === "infant")
+            notes.push(
+              "🟠 <strong>Infant:</strong> A <strong>Paediatrician</strong> is your primary doctor. Any fever above 38°C / 100.4°F warrants urgent care.",
+            );
+          else if (ag.key === "toddler" || ag.key === "preschool")
+            notes.push(
+              "🟡 <strong>Young child:</strong> A <strong>Paediatrician</strong> handles most illnesses. Specialists are paediatric versions where possible.",
+            );
+          else if (ag.key === "child")
+            notes.push(
+              "🟢 <strong>Child (6–12):</strong> A <strong>Paediatrician</strong> remains the first point of contact. Adult GP is also suitable.",
+            );
+          else if (ag.key === "senior")
+            notes.push(
+              "🔵 <strong>Senior patient:</strong> A <strong>Geriatrician</strong> or <strong>General Physician</strong> is best placed to manage multiple conditions together.",
+            );
+        }
+        if (
+          gender === "female" &&
+          ag &&
+          (ag.key === "teen" ||
+            ag.key === "adult" ||
+            ag.key === "middleage" ||
+            ag.key === "senior")
+        )
+          notes.push(
+            "👩 <strong>Female:</strong> A <strong>Gynaecologist / Obstetrician</strong> may also be relevant for many symptoms in women.",
+          );
+        if (bmi && parseFloat(bmi) >= 30)
+          notes.push(
+            "⚠️ <strong>BMI ≥ 30:</strong> Consider an <strong>Endocrinologist</strong> or <strong>Bariatric specialist</strong> alongside your primary doctor.",
+          );
+
+        if (notes.length) {
+          note.innerHTML = notes.join("<br>");
+          note.classList.add("show");
+        } else {
+          note.classList.remove("show");
+        }
+      }
+
+      // ── Specialist override by age group ────────────────────────────────────
+
+      function adjustDoctorForAge(doc, ag, gender) {
+        if (!ag) return doc;
+
+        const isChild = [
+          "newborn",
+          "infant",
+          "toddler",
+          "preschool",
+          "child",
+          "teen",
+        ].includes(ag.key);
+        const isVeryYoung = ["newborn", "infant"].includes(ag.key);
+
+        let d = { ...doc };
+
+        // Replace GP with Paediatrician for children
+        if (d.isPrimary && isChild) {
+          d = {
+            ...d,
+            icon: "👶",
+            doctor: isVeryYoung
+              ? "Neonatologist / Paediatrician"
+              : "Paediatrician (Child Specialist)",
+            specialty: isVeryYoung
+              ? "Newborn & Infant Medicine"
+              : "Children's Health (0–18 years)",
+            about: isVeryYoung
+              ? "A Neonatologist specialises in the care of newborns, especially those who are ill or premature. For infants and young children, a Paediatrician is the primary doctor for all health concerns."
+              : "A Paediatrician is the primary doctor for children from birth through adolescence. They manage all common illnesses and refer to paediatric specialists when needed.",
+            urgency: isVeryYoung ? "urgent" : d.urgency,
+            urgencyText: isVeryYoung
+              ? "See immediately"
+              : "See Paediatrician first",
+            warn: isVeryYoung
+              ? "Any symptom in a newborn (< 1 month) should be evaluated urgently. Fever above 38°C / 100.4°F in infants under 3 months requires emergency care."
+              : d.warn,
+          };
+        }
+
+        // Add paediatric prefix to specialists for children
+        if (!d.isPrimary && isChild) {
+          const adultOnly = ["Gynaecologist", "Andrologist", "Geriatrician"];
+          const skip = adultOnly.some((a) => d.doctor.includes(a));
+          if (!skip && !d.doctor.toLowerCase().includes("paediatric")) {
+            d = {
+              ...d,
+              specialty: "Paediatric " + d.specialty,
+              about: `For children, a <strong>Paediatric ${d.doctor}</strong> is preferred when possible. ${d.about}`,
+            };
+          }
+        }
+
+        // Replace GP with Geriatrician for seniors
+        if (d.isPrimary && ag.key === "senior") {
+          d = {
+            ...d,
+            icon: "🧓",
+            doctor: "General Physician / Geriatrician",
+            specialty: "Primary Care & Senior Health",
+            about:
+              "A Geriatrician specialises in the health of older adults and can manage multiple conditions simultaneously. For seniors, starting with a General Physician who is experienced in geriatric care is ideal.",
+          };
+        }
+
+        return d;
+      }
+
+      // ─────────────────────────────────────────────────────────────────────────
+
+      let selected = new Set();
+
+      function init() {
+        const qc = document.getElementById("quick-chips");
+        quickList.forEach((s) => {
+          const el = document.createElement("div");
+          el.className = "q-chip";
+          el.textContent = s;
+          el.id = "qc-" + s.replace(/\W/g, "_");
+          el.onclick = () => toggleSym(s);
+          qc.appendChild(el);
+        });
+
+        const sev = document.getElementById("severity");
+        const sevVal = document.getElementById("sev-val");
+        sev.oninput = function () {
+          const v = +this.value;
+          const pct = (((v - 1) / 9) * 100).toFixed(0) + "%";
+          this.style.setProperty("--val", pct);
+          const labels = [
+            "",
+            "Very mild",
+            "Mild",
+            "Mild",
+            "Moderate",
+            "Moderate",
+            "Moderate",
+            "Severe",
+            "Severe",
+            "Very severe",
+            "Extreme",
+          ];
+          sevVal.textContent = `${labels[v]} (${v}/10)`;
+        };
+        sev.style.setProperty("--val", "44%");
+
+        document.getElementById("sym-input").addEventListener("input", onInput);
+        document
+          .getElementById("sym-input")
+          .addEventListener("keydown", (e) => {
+            if (e.key === "Enter") addFromInput();
+          });
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".search-wrap"))
+            document.getElementById("autocomplete").style.display = "none";
+        });
+      }
+
+      function toggleSym(s) {
+        if (selected.has(s)) selected.delete(s);
+        else selected.add(s);
+        const chip = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+        if (chip) chip.classList.toggle("on", selected.has(s));
+        renderSel();
+      }
+
+      function onInput() {
+        const v = this.value.trim().toLowerCase();
+        const ac = document.getElementById("autocomplete");
+        if (v.length < 2) {
+          ac.style.display = "none";
+          return;
+        }
+        const m = allSymptoms
+          .filter((s) => s.toLowerCase().includes(v))
+          .slice(0, 7);
+        if (!m.length) {
+          ac.style.display = "none";
+          return;
+        }
+        ac.innerHTML = m
+          .map(
+            (s) =>
+              `<div class="auto-item" onclick="addSugg('${s}')"><div class="auto-dot"></div>${s}</div>`,
+          )
+          .join("");
+        ac.style.display = "block";
+      }
+
+      function addSugg(s) {
+        selected.add(s);
+        document.getElementById("sym-input").value = "";
+        document.getElementById("autocomplete").style.display = "none";
+        const chip = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+        if (chip) chip.classList.add("on");
+        renderSel();
+      }
+
+      function addFromInput() {
+        const inp = document.getElementById("sym-input");
+        const v = inp.value.trim();
+        if (v) {
+          selected.add(v);
+          inp.value = "";
+          document.getElementById("autocomplete").style.display = "none";
+          renderSel();
+        }
+      }
+
+      function renderSel() {
+        const wrap = document.getElementById("sel-wrap");
+        const sc = document.getElementById("sel-chips");
+        const btn = document.getElementById("analyze-btn");
+        document.getElementById("sel-count").textContent = selected.size;
+        if (!selected.size) {
+          wrap.style.display = "none";
+          return;
+        }
+        wrap.style.display = "block";
+        sc.innerHTML = [...selected]
+          .map(
+            (s) =>
+              `<div class="sel-chip">${s}<button onclick="removeSym('${s}')">×</button></div>`,
+          )
+          .join("");
+        document.getElementById("results").innerHTML = "";
+      }
+
+      function removeSym(s) {
+        selected.delete(s);
+        const chip = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+        if (chip) chip.classList.remove("on");
+        renderSel();
+      }
+
+      function clearAll() {
+        selected.forEach((s) => {
+          const c = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+          if (c) c.classList.remove("on");
+        });
+        selected.clear();
+        renderSel();
+        document.getElementById("results").innerHTML = "";
+      }
+
+      function analyze() {
+        const syms = [...selected];
+        const sev = +document.getElementById("severity").value;
+
+        // Patient profile
+        const ageVal = document.getElementById("pat-age").value;
+        const weight =
+          parseFloat(document.getElementById("pat-weight").value) || null;
+        const height =
+          parseFloat(document.getElementById("pat-height").value) || null;
+        const gender = document.getElementById("pat-gender").value;
+        const ag = getAgeGroup(ageVal);
+        const bmi = calcBMI(weight, height);
+
+        const isChild =
+          ag &&
+          [
+            "newborn",
+            "infant",
+            "toddler",
+            "preschool",
+            "child",
+            "teen",
+          ].includes(ag.key);
+
+        const allScored = db
+          .map((d) => {
+            const matched = d.symptoms.filter((ds) =>
+              syms.some(
+                (us) =>
+                  ds.toLowerCase().includes(us.toLowerCase()) ||
+                  us.toLowerCase().includes(ds.toLowerCase()),
+              ),
+            );
+            return { ...d, score: matched.length, matched };
+          })
+          .filter((d) => d.score > 0);
+
+        // Filter out irrelevant specialists based on age & gender
+        let filteredScored = allScored.filter((d) => {
+          const doc = (d.doctor || "").toLowerCase();
+          const isAdult =
+            !ag || ["adult", "middleage", "senior"].includes(ag.key);
+          const isChildAge =
+            ag &&
+            [
+              "newborn",
+              "infant",
+              "toddler",
+              "preschool",
+              "child",
+              "teen",
+            ].includes(ag.key);
+
+          // Remove standalone Paediatrician card for adults (GP becomes Paediatrician for children anyway)
+          if (
+            isAdult &&
+            !d.isPrimary &&
+            (doc.includes("paediatric") || doc.includes("pediatric"))
+          )
+            return false;
+
+          // Remove Geriatrician specialist card for non-seniors (handled via GP override)
+          if (
+            ag &&
+            ag.key !== "senior" &&
+            !d.isPrimary &&
+            doc.includes("geriatric")
+          )
+            return false;
+
+          // Gender filters
+          if (gender === "male" && doc.includes("gynaecol")) return false;
+          if (gender === "female" && doc.includes("androlog")) return false;
+
+          return true;
+        });
+
+        // Separate GP from specialists
+        const gpCard = filteredScored.find((d) => d.isPrimary);
+        const specialists = filteredScored
+          .filter((d) => !d.isPrimary)
+          .sort((a, b) => b.score - a.score);
+
+        // Check if any common GP symptoms were selected
+        const hasCommonSymptoms = syms.some((s) =>
+          gpSymptoms.some((g) => g.toLowerCase() === s.toLowerCase()),
+        );
+
+        // Build final order: GP always first if it matched or common symptoms selected, then specialists
+        let scored = [];
+        if (gpCard) scored.push(gpCard);
+        else if (hasCommonSymptoms)
+          scored.push({ ...db[0], score: 1, matched: [] });
+        scored = [...scored, ...specialists];
+
+        // Apply age/gender adjustments
+        scored = scored.map((d) => adjustDoctorForAge(d, ag, gender));
+
+        const res = document.getElementById("results");
+        if (!scored.length) {
+          const fallback = adjustDoctorForAge({ ...db[0] }, ag, gender);
+          res.innerHTML = `<div class="gp-card"><h3>See a ${fallback.doctor} first</h3><p>No specific specialist match found for your symptoms. A ${fallback.doctor} is the best first step — they can examine you, run initial tests, and refer you to the right specialist.</p></div>`;
+          return;
+        }
+
+        const specialistCount = specialists.length;
+        const profileSummary = [
+          ag ? ag.label : null,
+          weight ? `${weight} kg` : null,
+          bmi ? `BMI ${bmi}` : null,
+          gender ? gender.charAt(0).toUpperCase() + gender.slice(1) : null,
+        ]
+          .filter(Boolean)
+          .join(" · ");
+
+        let html = `<div class="results-header">${scored[0]?.isPrimary ? `Start with ${scored[0].doctor}` : "Results"} ${specialistCount > 0 ? `· ${specialistCount} specialist${specialistCount > 1 ? "s" : ""} matched` : ""}</div>`;
+        html += `<div class="results-sub">Based on ${syms.length} symptom${syms.length > 1 ? "s" : ""} · Severity ${sev}/10${profileSummary ? " · " + profileSummary : ""}</div>`;
+
+        scored.forEach((d, i) => {
+          const urgTag =
+            d.urgency === "urgent"
+              ? "tag-urgent"
+              : d.urgency === "moderate"
+                ? "tag-moderate"
+                : "tag-routine";
+          const gpBanner = d.isPrimary
+            ? `<div style="background:var(--accent-light);border-bottom:1px solid var(--accent);padding:10px 24px;font-size:12px;color:var(--accent);font-weight:600;display:flex;align-items:center;gap:8px;"><span>⭐</span> Start here — ${d.doctor} handles most common symptoms & refers you to the right specialist if needed.</div>`
+            : "";
+          const cardBorder = d.isPrimary
+            ? "border:2px solid var(--accent);"
+            : "";
+          html += `
+    <div class="result-card" style="animation-delay:${i * 0.07}s;${cardBorder}">
+      ${gpBanner}
+      <div class="rc-top" onclick="toggle(${i})">
+        <div class="rc-emoji">${d.icon}</div>
+        <div class="rc-info">
+          <div class="rc-doctor">${d.doctor}</div>
+          <div class="rc-specialty">${d.specialty}</div>
+          <div class="rc-tags">
+            <span class="tag ${urgTag}">${d.urgencyText}</span>
+            <span class="tag tag-match">${d.score} symptom${d.score > 1 ? "s" : ""} matched</span>
+            ${d.isPrimary ? '<span class="tag" style="background:var(--accent);color:#fff;">See first</span>' : ""}
+          </div>
+        </div>
+        <div class="rc-toggle" id="tog-${i}">▼</div>
+      </div>
+      <div class="rc-body" id="body-${i}">
+        <div class="about-text">${d.about}</div>
+        <div class="rc-grid">
+          <div class="rc-section">
+            <div class="rc-section-title">Possible conditions</div>
+            ${d.possible.map((p) => `<div class="condition-item"><div class="cond-dot"></div>${p}</div>`).join("")}
+          </div>
+          <div class="rc-section">
+            <div class="rc-section-title">Lifestyle & self-care</div>
+            ${d.lifestyle.map((l) => `<div class="lifestyle-item"><div class="life-dot"></div>${l}</div>`).join("")}
+          </div>
+        </div>
+        <div class="rc-section" style="margin-top:16px;">
+          <div class="rc-section-title">Recommended tests & investigations</div>
+          <div class="tests-wrap">${d.tests.map((t) => `<span class="test-pill">${t}</span>`).join("")}</div>
+        </div>
+        ${d.warn ? `<div class="warn-box"><span class="warn-icon">⚠️</span><span>${d.warn}</span></div>` : ""}
+      </div>
+    </div>`;
+        });
+        res.innerHTML = html;
+        res.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function toggle(i) {
+        const body = document.getElementById("body-" + i);
+        const tog = document.getElementById("tog-" + i);
+        body.classList.toggle("open");
+        tog.classList.toggle("open");
+      }
+
+      init();
+    </script>
+  </body>
+</html>
