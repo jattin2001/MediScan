@@ -818,6 +818,616 @@
           padding: 16px 20px;
         }
       }
+
+      /* ── DARK MODE ─────────────────────────────────────────────────────── */
+      body.dark {
+        --bg: #0f1117;
+        --surface: #1a1d27;
+        --surface2: #22263a;
+        --text: #e8e6e3;
+        --text2: #9a96a0;
+        --text3: #6b6870;
+        --border: #2e3147;
+        --accent-light: #1a3d2b;
+        --warn-light: #3d1f18;
+        --moderate-light: #2e2510;
+        --shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+        --shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.5);
+      }
+      body.dark .hero {
+        background: linear-gradient(135deg, #1b4332 0%, #0a1f16 100%);
+      }
+      body.dark #sym-input,
+      body.dark .profile-field input,
+      body.dark .profile-field select {
+        color: var(--text);
+      }
+      body.dark .autocomplete {
+        background: var(--surface);
+      }
+      body.dark .bmi-under {
+        background: #0d2744;
+        color: #6baed6;
+      }
+
+      /* ── DARK TOGGLE BTN ─────────────────────────────────────────────── */
+      .dark-toggle {
+        background: none;
+        border: 1.5px solid var(--border);
+        border-radius: 30px;
+        padding: 5px 12px;
+        font-size: 13px;
+        cursor: pointer;
+        color: var(--text2);
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .dark-toggle:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── EMERGENCY BANNER ────────────────────────────────────────────── */
+      #emergency-banner {
+        display: none;
+        background: #c0392b;
+        color: #fff;
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        animation: pulse-red 1.5s infinite;
+      }
+      @keyframes pulse-red {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 rgba(192, 57, 43, 0.4);
+        }
+        50% {
+          box-shadow: 0 0 0 12px rgba(192, 57, 43, 0);
+        }
+      }
+      #emergency-banner h3 {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      #emergency-banner p {
+        font-size: 14px;
+        opacity: 0.92;
+        line-height: 1.6;
+      }
+      .emergency-number {
+        display: inline-block;
+        background: #fff;
+        color: #c0392b;
+        font-weight: 800;
+        font-size: 20px;
+        padding: 6px 18px;
+        border-radius: 30px;
+        margin-top: 12px;
+        letter-spacing: 1px;
+      }
+
+      /* ── BODY MAP ────────────────────────────────────────────────────── */
+      .bodymap-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 24px 28px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+      }
+      .bodymap-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+      .bodymap-toggle {
+        font-size: 12px;
+        color: var(--accent);
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 600;
+      }
+      .bodymap-inner {
+        display: none;
+      }
+      .bodymap-inner.open {
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+      }
+      .bodymap-svg-wrap {
+        flex: 0 0 160px;
+      }
+      .bodymap-svg-wrap svg {
+        width: 100%;
+        cursor: pointer;
+      }
+      .body-region {
+        fill: var(--surface2);
+        stroke: var(--border);
+        stroke-width: 1.5;
+        transition:
+          fill 0.2s,
+          stroke 0.2s;
+        cursor: pointer;
+      }
+      .body-region:hover {
+        fill: var(--accent-light);
+        stroke: var(--accent);
+      }
+      .body-region.selected {
+        fill: var(--accent-light);
+        stroke: var(--accent);
+        stroke-width: 2;
+      }
+      .bodymap-symptoms {
+        flex: 1;
+        min-width: 200px;
+      }
+      .bodymap-symptoms .region-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+      }
+      .bodymap-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .bodymap-chip {
+        padding: 6px 13px;
+        border-radius: 30px;
+        font-size: 13px;
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+        color: var(--text2);
+        background: var(--bg);
+        transition: all 0.2s;
+        font-family: "DM Sans", sans-serif;
+      }
+      .bodymap-chip:hover {
+        border-color: var(--accent2);
+        color: var(--accent);
+      }
+      .bodymap-chip.on {
+        background: var(--accent-light);
+        border-color: var(--accent);
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* ── EXTRA PROFILE FIELDS ────────────────────────────────────────── */
+      .extra-profile {
+        margin-top: 16px;
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+      }
+      .duration-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 500px) {
+        .duration-row {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      /* ── MEDICATIONS ─────────────────────────────────────────────────── */
+      .meds-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .med-chip {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 5px 12px;
+        border-radius: 30px;
+        background: var(--moderate-light);
+        border: 1.5px solid var(--moderate);
+        font-size: 12px;
+        color: #7a5800;
+        font-weight: 500;
+      }
+      .med-chip button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #9c6c00;
+        font-size: 15px;
+        line-height: 1;
+        padding: 0;
+      }
+
+      /* ── CONDITIONS MULTI-SELECT ─────────────────────────────────────── */
+      .conditions-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .cond-chip {
+        padding: 6px 13px;
+        border-radius: 30px;
+        font-size: 12px;
+        border: 1.5px solid var(--border);
+        cursor: pointer;
+        color: var(--text2);
+        background: var(--bg);
+        font-family: "DM Sans", sans-serif;
+        transition: all 0.2s;
+      }
+      .cond-chip.on {
+        background: var(--warn-light);
+        border-color: var(--warn);
+        color: var(--warn);
+        font-weight: 600;
+      }
+
+      /* ── HISTORY PANEL ───────────────────────────────────────────────── */
+      .history-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+      }
+      .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .history-items {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .history-item {
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        padding: 12px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        border: 1px solid var(--border);
+        transition: border-color 0.2s;
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .history-item:hover {
+        border-color: var(--accent);
+      }
+      .history-item-info {
+        flex: 1;
+      }
+      .history-item-date {
+        font-size: 11px;
+        color: var(--text3);
+        margin-bottom: 2px;
+      }
+      .history-item-syms {
+        color: var(--text);
+        font-weight: 500;
+      }
+      .history-item-del {
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text3);
+        font-size: 16px;
+        line-height: 1;
+        flex-shrink: 0;
+      }
+      .history-item-del:hover {
+        color: var(--warn);
+      }
+      .no-history {
+        font-size: 13px;
+        color: var(--text3);
+        text-align: center;
+        padding: 12px;
+      }
+
+      /* ── SEVERITY TIMELINE ───────────────────────────────────────────── */
+      .timeline-wrap {
+        background: var(--surface);
+        border-radius: var(--radius);
+        border: 1px solid var(--border);
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: var(--shadow);
+      }
+      .timeline-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .timeline-inner {
+        display: none;
+      }
+      .timeline-inner.open {
+        display: block;
+      }
+      .timeline-log-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .timeline-log-row input[type="number"] {
+        width: 70px;
+        padding: 8px 10px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 14px;
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        outline: none;
+      }
+      .timeline-log-row input:focus {
+        border-color: var(--accent);
+      }
+      .timeline-add-btn {
+        padding: 8px 16px;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.2s;
+      }
+      .timeline-add-btn:hover {
+        background: #1b4332;
+      }
+      .timeline-chart {
+        position: relative;
+        height: 100px;
+        margin-top: 10px;
+      }
+      .timeline-bar-wrap {
+        display: flex;
+        align-items: flex-end;
+        gap: 4px;
+        height: 80px;
+      }
+      .tbar {
+        flex: 1;
+        border-radius: 4px 4px 0 0;
+        background: var(--accent);
+        min-height: 4px;
+        transition: height 0.3s;
+        cursor: default;
+        position: relative;
+      }
+      .tbar:hover .tbar-tip {
+        display: block;
+      }
+      .tbar-tip {
+        display: none;
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--text);
+        color: var(--surface);
+        font-size: 11px;
+        padding: 3px 7px;
+        border-radius: 6px;
+        white-space: nowrap;
+        margin-bottom: 4px;
+        z-index: 10;
+      }
+      .timeline-labels {
+        display: flex;
+        gap: 4px;
+        font-size: 10px;
+        color: var(--text3);
+        margin-top: 2px;
+      }
+      .timeline-labels span {
+        flex: 1;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      /* ── PRINT / EXPORT ─────────────────────────────────────────────── */
+      .print-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        background: var(--surface2);
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        color: var(--text2);
+        font-weight: 600;
+        transition: all 0.2s;
+        margin-top: 8px;
+      }
+      .print-btn:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* ── FIND DOCTOR BTN ────────────────────────────────────────────── */
+      .find-doc-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        background: var(--accent-light);
+        border: 1.5px solid var(--accent);
+        border-radius: var(--radius-sm);
+        font-size: 13px;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        color: var(--accent);
+        font-weight: 600;
+        transition: all 0.2s;
+        text-decoration: none;
+      }
+      .find-doc-btn:hover {
+        background: var(--accent);
+        color: #fff;
+      }
+      .result-actions {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+      }
+
+      /* ── AFFILIATE BOOKING ──────────────────────────────────────────────── */
+      .book-tests-section {
+        margin-top: 18px;
+        background: linear-gradient(135deg, #f0fdf4, #e8f5e9);
+        border: 1.5px solid var(--accent);
+        border-radius: var(--radius-sm);
+        padding: 16px 18px;
+      }
+      body.dark .book-tests-section {
+        background: linear-gradient(135deg, #0d2b1a, #0a2016);
+      }
+      .book-tests-title {
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .book-labs-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+      }
+      .book-lab-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 14px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s;
+        border: 1.5px solid;
+      }
+      .book-lab-btn.thyrocare {
+        background: #fff3e0;
+        border-color: #e65100;
+        color: #e65100;
+      }
+      .book-lab-btn.thyrocare:hover {
+        background: #e65100;
+        color: #fff;
+      }
+      .book-lab-btn.lal {
+        background: #fce4ec;
+        border-color: #c62828;
+        color: #c62828;
+      }
+      .book-lab-btn.lal:hover {
+        background: #c62828;
+        color: #fff;
+      }
+      .book-lab-btn.redcliffe {
+        background: #e8eaf6;
+        border-color: #3949ab;
+        color: #3949ab;
+      }
+      .book-lab-btn.redcliffe:hover {
+        background: #3949ab;
+        color: #fff;
+      }
+      .book-lab-btn.onemg {
+        background: #e0f7fa;
+        border-color: #00838f;
+        color: #00838f;
+      }
+      .book-lab-btn.onemg:hover {
+        background: #00838f;
+        color: #fff;
+      }
+      .affiliate-note {
+        font-size: 10px;
+        color: var(--text3);
+        margin-top: 10px;
+        line-height: 1.5;
+      }
+
+      @media print {
+        .app-header,
+        .hero,
+        .panel,
+        .profile-wrap,
+        .severity-wrap,
+        .sel-wrap,
+        .bodymap-wrap,
+        .timeline-wrap,
+        .history-wrap,
+        .disclaimer,
+        footer,
+        .print-btn,
+        .find-doc-btn,
+        .result-actions,
+        .dark-toggle,
+        #emergency-banner,
+        .book-tests-section {
+          display: none !important;
+        }
+        body {
+          background: #fff !important;
+        }
+        .result-card {
+          box-shadow: none !important;
+          border: 1px solid #ccc !important;
+          page-break-inside: avoid;
+        }
+        .rc-body {
+          display: block !important;
+        }
+        .rc-toggle {
+          display: none !important;
+        }
+        .main {
+          padding: 0 !important;
+        }
+      }
     </style>
   </head>
   <body>
@@ -826,7 +1436,12 @@
         <div class="logo-icon">🩺</div>
         <span class="logo-text">Medi<span>Scan</span></span>
       </div>
-      <span class="header-badge">Not a substitute for medical advice</span>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span class="header-badge">Not a substitute for medical advice</span>
+        <button class="dark-toggle" id="dark-toggle" onclick="toggleDark()">
+          🌙 Dark
+        </button>
+      </div>
     </header>
 
     <div class="hero">
@@ -856,7 +1471,270 @@
     </div>
 
     <div class="main">
-      <!-- PATIENT PROFILE -->
+      <!-- EMERGENCY BANNER -->
+      <div id="emergency-banner">
+        <h3>🚨 Emergency Warning — Seek Immediate Medical Help</h3>
+        <p id="emergency-msg">
+          Your symptoms may indicate a life-threatening emergency. Do not wait.
+        </p>
+        <div class="emergency-number">📞 108 / 112</div>
+      </div>
+
+      <!-- BODY MAP -->
+      <div class="bodymap-wrap">
+        <div class="bodymap-header">
+          <div class="panel-title" style="margin-bottom: 0">
+            🧍 Body Map — tap a region to filter symptoms
+          </div>
+          <button class="bodymap-toggle" onclick="toggleBodymap()">
+            Show ▼
+          </button>
+        </div>
+        <div class="bodymap-inner" id="bodymap-inner">
+          <div class="bodymap-svg-wrap">
+            <svg viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+              <!-- Head -->
+              <ellipse
+                class="body-region"
+                id="bm-head"
+                cx="50"
+                cy="18"
+                rx="16"
+                ry="17"
+                onclick="selectRegion('head')"
+              />
+              <!-- Neck -->
+              <rect
+                class="body-region"
+                id="bm-neck"
+                x="43"
+                y="33"
+                width="14"
+                height="10"
+                rx="4"
+                onclick="selectRegion('neck')"
+              />
+              <!-- Chest -->
+              <rect
+                class="body-region"
+                id="bm-chest"
+                x="30"
+                y="44"
+                width="40"
+                height="35"
+                rx="6"
+                onclick="selectRegion('chest')"
+              />
+              <!-- Abdomen -->
+              <rect
+                class="body-region"
+                id="bm-abdomen"
+                x="30"
+                y="81"
+                width="40"
+                height="30"
+                rx="6"
+                onclick="selectRegion('abdomen')"
+              />
+              <!-- Left Arm (user's left = screen right) -->
+              <rect
+                class="body-region"
+                id="bm-left_arm"
+                x="72"
+                y="46"
+                width="16"
+                height="55"
+                rx="7"
+                onclick="selectRegion('left_arm')"
+              />
+              <!-- Right Arm (user's right = screen left) -->
+              <rect
+                class="body-region"
+                id="bm-right_arm"
+                x="12"
+                y="46"
+                width="16"
+                height="55"
+                rx="7"
+                onclick="selectRegion('right_arm')"
+              />
+              <!-- Pelvis/Groin -->
+              <rect
+                class="body-region"
+                id="bm-pelvis"
+                x="32"
+                y="113"
+                width="36"
+                height="18"
+                rx="5"
+                onclick="selectRegion('pelvis')"
+              />
+              <!-- Left Leg (user's left = screen right) -->
+              <rect
+                class="body-region"
+                id="bm-left_leg"
+                x="53"
+                y="133"
+                width="17"
+                height="70"
+                rx="7"
+                onclick="selectRegion('left_leg')"
+              />
+              <!-- Right Leg (user's right = screen left) -->
+              <rect
+                class="body-region"
+                id="bm-right_leg"
+                x="30"
+                y="133"
+                width="17"
+                height="70"
+                rx="7"
+                onclick="selectRegion('right_leg')"
+              />
+              <!-- Labels -->
+              <text
+                x="50"
+                y="20"
+                text-anchor="middle"
+                font-size="6"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Head
+              </text>
+              <text
+                x="50"
+                y="65"
+                text-anchor="middle"
+                font-size="6"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Chest
+              </text>
+              <text
+                x="50"
+                y="98"
+                text-anchor="middle"
+                font-size="6"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Abdomen
+              </text>
+              <text
+                x="20"
+                y="72"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Right
+              </text>
+              <text
+                x="20"
+                y="77"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Arm
+              </text>
+              <text
+                x="80"
+                y="72"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Left
+              </text>
+              <text
+                x="80"
+                y="77"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Arm
+              </text>
+              <text
+                x="50"
+                y="124"
+                text-anchor="middle"
+                font-size="5.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Pelvis
+              </text>
+              <text
+                x="38"
+                y="168"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Right
+              </text>
+              <text
+                x="38"
+                y="174"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Leg
+              </text>
+              <text
+                x="62"
+                y="168"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Left
+              </text>
+              <text
+                x="62"
+                y="174"
+                text-anchor="middle"
+                font-size="4.5"
+                fill="#6b6460"
+                pointer-events="none"
+              >
+                Leg
+              </text>
+            </svg>
+          </div>
+          <div class="bodymap-symptoms">
+            <div class="region-title" id="bm-region-title">
+              Select a region on the body
+            </div>
+            <div class="bodymap-chips" id="bm-chips"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SYMPTOM HISTORY -->
+      <div class="history-wrap">
+        <div class="history-header">
+          <div class="panel-title" style="margin-bottom: 0">
+            📋 Past Symptom Checks
+          </div>
+          <button class="clear-btn" onclick="clearHistory()">
+            Clear history
+          </button>
+        </div>
+        <div id="history-items"></div>
+      </div>
       <div class="profile-wrap">
         <div class="panel-title">Patient profile</div>
         <div class="profile-grid">
@@ -911,6 +1789,72 @@
           </div>
         </div>
         <div id="profile-note" class="profile-note"></div>
+
+        <!-- Extra fields -->
+        <div class="extra-profile">
+          <div class="panel-title" style="margin-bottom: 12px">
+            Symptom Duration & Onset
+          </div>
+          <div class="duration-row">
+            <div class="profile-field">
+              <label>Duration</label>
+              <select id="pat-duration">
+                <option value="">Not specified</option>
+                <option value="hours">A few hours</option>
+                <option value="1day">About 1 day</option>
+                <option value="2-3days">2–3 days</option>
+                <option value="1week">About a week</option>
+                <option value="2weeks">1–2 weeks</option>
+                <option value="1month">About a month</option>
+                <option value="months">Several months</option>
+                <option value="chronic">Chronic (6+ months)</option>
+              </select>
+            </div>
+            <div class="profile-field">
+              <label>Onset</label>
+              <select id="pat-onset">
+                <option value="">Not specified</option>
+                <option value="sudden">Sudden / abrupt</option>
+                <option value="gradual">Gradually developed</option>
+                <option value="recurring">Recurring / comes and goes</option>
+                <option value="worsening">Gradually worsening</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="extra-profile">
+          <div class="panel-title" style="margin-bottom: 10px">
+            💊 Current Medications
+          </div>
+          <div class="search-wrap" style="margin-bottom: 8px">
+            <span class="search-icon">💊</span>
+            <input
+              id="med-input"
+              placeholder="Type a medication and press Enter…"
+              style="
+                width: 100%;
+                padding: 10px 14px 10px 42px;
+                border: 1.5px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 14px;
+                font-family: &quot;DM Sans&quot;, sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                outline: none;
+              "
+              onkeydown="addMed(event)"
+            />
+          </div>
+          <div class="meds-chips" id="meds-chips"></div>
+        </div>
+
+        <div class="extra-profile">
+          <div class="panel-title" style="margin-bottom: 10px">
+            🏥 Pre-existing Conditions
+          </div>
+          <div class="conditions-grid" id="conditions-grid"></div>
+        </div>
       </div>
 
       <!-- SEARCH PANEL -->
@@ -965,6 +1909,57 @@
         </button>
       </div>
 
+      <!-- SEVERITY TIMELINE -->
+      <div class="timeline-wrap">
+        <div class="timeline-header">
+          <div class="panel-title" style="margin-bottom: 0">
+            📈 Severity Timeline — track daily
+          </div>
+          <button class="bodymap-toggle" onclick="toggleTimeline()">
+            Show ▼
+          </button>
+        </div>
+        <div class="timeline-inner" id="timeline-inner">
+          <div class="timeline-log-row">
+            <input
+              type="number"
+              id="tl-score"
+              min="1"
+              max="10"
+              placeholder="1–10"
+            />
+            <input
+              type="text"
+              id="tl-note"
+              placeholder="Optional note (e.g. after meal)"
+              style="
+                flex: 1;
+                padding: 8px 10px;
+                border: 1.5px solid var(--border);
+                border-radius: var(--radius-sm);
+                font-size: 13px;
+                font-family: &quot;DM Sans&quot;, sans-serif;
+                background: var(--bg);
+                color: var(--text);
+                outline: none;
+                min-width: 120px;
+              "
+            />
+            <button class="timeline-add-btn" onclick="addTimelineEntry()">
+              + Log
+            </button>
+            <button
+              class="clear-btn"
+              onclick="clearTimeline()"
+              style="font-size: 12px"
+            >
+              Clear
+            </button>
+          </div>
+          <div id="timeline-chart"></div>
+        </div>
+      </div>
+
       <!-- RESULTS -->
       <div id="results"></div>
 
@@ -983,6 +1978,71 @@
     </footer>
 
     <script>
+      // ══════════════════════════════════════════════════════════════════════
+      // AFFILIATE LINKS — paste your own links here once you get them
+      // Sign up free at: cuelinks.com  OR  direct lab affiliate programs
+      // ══════════════════════════════════════════════════════════════════════
+      const AFFILIATE = {
+        thyrocare: {
+          name: "Thyrocare",
+          label: "🔬 Book on Thyrocare",
+          cls: "thyrocare",
+          // Replace with your Cuelinks / Thyrocare affiliate URL:
+          url: "https://www.thyrocare.com/?utm_source=mediscan&utm_medium=affiliate",
+        },
+        lal: {
+          name: "Dr. Lal PathLabs",
+          label: "🧪 Dr. Lal PathLabs",
+          cls: "lal",
+          url: "https://www.lalpathlabs.com/?utm_source=mediscan&utm_medium=affiliate",
+        },
+        redcliffe: {
+          name: "Redcliffe Labs",
+          label: "🩺 Redcliffe Labs",
+          cls: "redcliffe",
+          url: "https://redcliffelabs.com/?utm_source=mediscan&utm_medium=affiliate",
+        },
+        onemg: {
+          name: "1mg",
+          label: "💊 Book on 1mg",
+          cls: "onemg",
+          url: "https://www.1mg.com/lab-tests?utm_source=mediscan&utm_medium=affiliate",
+        },
+      };
+
+      // Map test keywords → which labs are most relevant
+      // (all labs shown by default; this lets you spotlight specific ones per test type)
+      function getLabsForTests(tests) {
+        // Always show all 4 for now — you can customise per test later
+        return Object.values(AFFILIATE);
+      }
+
+      function buildBookingHTML(tests) {
+        if (!tests || !tests.length) return "";
+        const labs = getLabsForTests(tests);
+        const btns = labs
+          .map(
+            (lab) =>
+              `<a class="book-lab-btn ${lab.cls}" href="${lab.url}" target="_blank" rel="noopener" onclick="trackAffiliate('${lab.name}')">${lab.label}</a>`,
+          )
+          .join("");
+        return `
+          <div class="book-tests-section">
+            <div class="book-tests-title">🏥 Book these tests online — home sample collection available</div>
+            <div class="book-labs-row">${btns}</div>
+            <div class="affiliate-note">
+              ℹ️ MediScan may earn a small commission when you book via these links — at no extra cost to you.
+              Always consult your doctor before ordering tests.
+            </div>
+          </div>`;
+      }
+
+      function trackAffiliate(labName) {
+        // Optional: log clicks for your own analytics
+        console.log("Affiliate click:", labName, new Date().toISOString());
+        // You can also send to Google Analytics here if you add it later
+      }
+
       const allSymptoms = [
         "Headache",
         "Fever",
@@ -2482,6 +3542,12 @@
         const syms = [...selected];
         const sev = +document.getElementById("severity").value;
 
+        // ── Run emergency check ──
+        checkEmergency(syms);
+
+        // ── Save to history ──
+        if (syms.length) addHistoryEntry(syms);
+
         // Patient profile
         const ageVal = document.getElementById("pat-age").value;
         const weight =
@@ -2516,31 +3582,16 @@
           })
           .filter((d) => d.score > 0);
 
-        // Filter out irrelevant specialists based on age & gender
         let filteredScored = allScored.filter((d) => {
           const doc = (d.doctor || "").toLowerCase();
           const isAdult =
             !ag || ["adult", "middleage", "senior"].includes(ag.key);
-          const isChildAge =
-            ag &&
-            [
-              "newborn",
-              "infant",
-              "toddler",
-              "preschool",
-              "child",
-              "teen",
-            ].includes(ag.key);
-
-          // Remove standalone Paediatrician card for adults (GP becomes Paediatrician for children anyway)
           if (
             isAdult &&
             !d.isPrimary &&
             (doc.includes("paediatric") || doc.includes("pediatric"))
           )
             return false;
-
-          // Remove Geriatrician specialist card for non-seniors (handled via GP override)
           if (
             ag &&
             ag.key !== "senior" &&
@@ -2548,33 +3599,24 @@
             doc.includes("geriatric")
           )
             return false;
-
-          // Gender filters
           if (gender === "male" && doc.includes("gynaecol")) return false;
           if (gender === "female" && doc.includes("androlog")) return false;
-
           return true;
         });
 
-        // Separate GP from specialists
         const gpCard = filteredScored.find((d) => d.isPrimary);
         const specialists = filteredScored
           .filter((d) => !d.isPrimary)
           .sort((a, b) => b.score - a.score);
-
-        // Check if any common GP symptoms were selected
         const hasCommonSymptoms = syms.some((s) =>
           gpSymptoms.some((g) => g.toLowerCase() === s.toLowerCase()),
         );
 
-        // Build final order: GP always first if it matched or common symptoms selected, then specialists
         let scored = [];
         if (gpCard) scored.push(gpCard);
         else if (hasCommonSymptoms)
           scored.push({ ...db[0], score: 1, matched: [] });
         scored = [...scored, ...specialists];
-
-        // Apply age/gender adjustments
         scored = scored.map((d) => adjustDoctorForAge(d, ag, gender));
 
         const res = document.getElementById("results");
@@ -2594,7 +3636,48 @@
           .filter(Boolean)
           .join(" · ");
 
-        let html = `<div class="results-header">${scored[0]?.isPrimary ? `Start with ${scored[0].doctor}` : "Results"} ${specialistCount > 0 ? `· ${specialistCount} specialist${specialistCount > 1 ? "s" : ""} matched` : ""}</div>`;
+        // ── Duration / Onset / Conditions / Meds context ──
+        const dur = document.getElementById("pat-duration").value;
+        const onset = document.getElementById("pat-onset").value;
+        const durLabels = {
+          hours: "A few hours",
+          "1day": "About 1 day",
+          "2-3days": "2–3 days",
+          "1week": "About a week",
+          "2weeks": "1–2 weeks",
+          "1month": "About a month",
+          months: "Several months",
+          chronic: "Chronic (6+ months)",
+        };
+        const onsetLabels = {
+          sudden: "Sudden",
+          gradual: "Gradual",
+          recurring: "Recurring",
+          worsening: "Gradually worsening",
+        };
+        let contextParts = [];
+        if (dur) contextParts.push("Duration: " + durLabels[dur]);
+        if (onset) contextParts.push("Onset: " + onsetLabels[onset]);
+        if (selectedConditions.size)
+          contextParts.push(
+            "Pre-existing: " + [...selectedConditions].join(", "),
+          );
+        if (medications.size)
+          contextParts.push("Medications: " + [...medications].join(", "));
+        const contextHTML = contextParts.length
+          ? `<div style="font-size:12px;color:var(--text2);background:var(--bg);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;border-left:3px solid var(--accent);line-height:1.7;"><strong>📋 Your profile context:</strong><br>${contextParts.join(" &nbsp;·&nbsp; ")}</div>`
+          : "";
+
+        // ── Action buttons ──
+        const mainDocName = scored[0] ? scored[0].doctor : "General Physician";
+        const actionsHTML = `<div class="result-actions">
+          <button class="print-btn" onclick="printResults()">🖨️ Print / Save Results</button>
+          <button class="find-doc-btn" onclick="findDoctorNearMe('${mainDocName.replace(/'/g, "")}')" style="border:none;cursor:pointer;">📍 Find ${mainDocName} Near Me</button>
+        </div>`;
+
+        let html = actionsHTML;
+        html += contextHTML;
+        html += `<div class="results-header">${scored[0]?.isPrimary ? `Start with ${scored[0].doctor}` : "Results"} ${specialistCount > 0 ? `· ${specialistCount} specialist${specialistCount > 1 ? "s" : ""} matched` : ""}</div>`;
         html += `<div class="results-sub">Based on ${syms.length} symptom${syms.length > 1 ? "s" : ""} · Severity ${sev}/10${profileSummary ? " · " + profileSummary : ""}</div>`;
 
         scored.forEach((d, i) => {
@@ -2642,10 +3725,12 @@
           <div class="rc-section-title">Recommended tests & investigations</div>
           <div class="tests-wrap">${d.tests.map((t) => `<span class="test-pill">${t}</span>`).join("")}</div>
         </div>
+        ${buildBookingHTML(d.tests)}
         ${d.warn ? `<div class="warn-box"><span class="warn-icon">⚠️</span><span>${d.warn}</span></div>` : ""}
       </div>
     </div>`;
         });
+
         res.innerHTML = html;
         res.scrollIntoView({ behavior: "smooth", block: "start" });
       }
@@ -2658,6 +3743,476 @@
       }
 
       init();
+      initBodymap();
+      initConditions();
+      renderHistory();
+      renderTimeline();
+
+      // ── SAFE STORAGE (works locally via file:// AND hosted) ─────────────
+      const safeStorage = {
+        get(key) {
+          try {
+            return localStorage.getItem(key);
+          } catch (e) {
+            return null;
+          }
+        },
+        set(key, val) {
+          try {
+            localStorage.setItem(key, val);
+          } catch (e) {}
+        },
+        remove(key) {
+          try {
+            localStorage.removeItem(key);
+          } catch (e) {}
+        },
+      };
+
+      // ── DARK MODE ────────────────────────────────────────────────────────
+      function toggleDark() {
+        document.body.classList.toggle("dark");
+        const btn = document.getElementById("dark-toggle");
+        btn.textContent = document.body.classList.contains("dark")
+          ? "☀️ Light"
+          : "🌙 Dark";
+        safeStorage.set(
+          "mediscan-dark",
+          document.body.classList.contains("dark") ? "1" : "0",
+        );
+      }
+      if (safeStorage.get("mediscan-dark") === "1") {
+        document.body.classList.add("dark");
+        document.getElementById("dark-toggle").textContent = "☀️ Light";
+      }
+
+      // ── EMERGENCY COMBOS ─────────────────────────────────────────────────
+      const emergencyCombos = [
+        {
+          symptoms: ["Chest pain", "Shortness of breath"],
+          msg: "Chest pain with shortness of breath can indicate a heart attack or pulmonary embolism.",
+        },
+        {
+          symptoms: ["Chest pain", "Sweating"],
+          msg: "Chest pain with sweating is a classic heart attack warning sign.",
+        },
+        {
+          symptoms: ["Chest pain", "Heart palpitations"],
+          msg: "Chest pain with palpitations may indicate a serious cardiac arrhythmia.",
+        },
+        {
+          symptoms: ["Chest pain", "Nausea"],
+          msg: "Chest pain with nausea can indicate a heart attack, especially in women.",
+        },
+        {
+          symptoms: ["Seizures"],
+          msg: "Active or new-onset seizures require immediate emergency care.",
+        },
+        {
+          symptoms: ["Slurred speech", "Muscle weakness"],
+          msg: "Slurred speech with weakness may indicate a stroke. Act FAST.",
+        },
+        {
+          symptoms: ["Slurred speech", "Numbness or tingling"],
+          msg: "These may be stroke warning signs. Act FAST — call emergency services.",
+        },
+        {
+          symptoms: ["Sudden severe headache"],
+          msg: 'A sudden "thunderclap" headache can indicate a brain bleed or aneurysm.',
+        },
+        {
+          symptoms: ["Shortness of breath", "Coughing blood"],
+          msg: "Coughing blood with breathlessness requires immediate emergency evaluation.",
+        },
+        {
+          symptoms: ["Loss of consciousness"],
+          msg: "Any loss of consciousness requires emergency evaluation immediately.",
+        },
+        {
+          symptoms: ["Fever", "Stiff neck", "Headache"],
+          msg: "This triad can indicate bacterial meningitis — a life-threatening emergency.",
+        },
+      ];
+
+      function checkEmergency(syms) {
+        const banner = document.getElementById("emergency-banner");
+        const msg = document.getElementById("emergency-msg");
+        const symLower = syms.map((s) => s.toLowerCase());
+        for (const combo of emergencyCombos) {
+          const allMatch = combo.symptoms.every((cs) =>
+            symLower.some((s) => s.includes(cs.toLowerCase())),
+          );
+          if (allMatch) {
+            msg.textContent =
+              combo.msg +
+              " Call emergency services immediately — do not drive yourself.";
+            banner.style.display = "block";
+            banner.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+          }
+        }
+        banner.style.display = "none";
+      }
+
+      // ── BODY MAP ─────────────────────────────────────────────────────────
+      const regionSymptoms = {
+        head: [
+          "Headache",
+          "Dizziness",
+          "Blurred vision",
+          "Double vision",
+          "Eye redness",
+          "Memory loss",
+          "Confusion",
+          "Slurred speech",
+          "Sensitivity to light",
+          "Sensitivity to sound",
+          "Loss of smell",
+          "Loss of taste",
+          "Ear pain",
+          "Ringing in ears",
+          "Facial pain",
+          "Jaw pain",
+          "Toothache",
+        ],
+        neck: [
+          "Sore throat",
+          "Difficulty swallowing",
+          "Hoarse voice",
+          "Swollen lymph nodes",
+          "Neck pain",
+          "Lump in throat",
+          "Thyroid swelling",
+        ],
+        chest: [
+          "Chest pain",
+          "Chest tightness",
+          "Shortness of breath",
+          "Wheezing",
+          "Cough",
+          "Heart palpitations",
+          "Palpitations at rest",
+          "Rapid breathing",
+          "Breast pain",
+        ],
+        abdomen: [
+          "Abdominal pain",
+          "Nausea",
+          "Vomiting",
+          "Bloating",
+          "Gas or flatulence",
+          "Acid reflux",
+          "Constipation",
+          "Diarrhea",
+          "Jaundice",
+          "Swollen abdomen",
+          "Loss of appetite",
+          "Rectal bleeding",
+        ],
+        pelvis: [
+          "Frequent urination",
+          "Burning urination",
+          "Blood in urine",
+          "Irregular periods",
+          "Pelvic pain",
+          "Vaginal discharge",
+          "Testicular pain",
+          "Sexual dysfunction",
+          "Groin pain",
+        ],
+        left_arm: [
+          "Shoulder pain",
+          "Joint pain",
+          "Muscle weakness",
+          "Numbness or tingling",
+          "Swollen joints",
+          "Muscle cramps",
+          "Tremors",
+        ],
+        right_arm: [
+          "Shoulder pain",
+          "Joint pain",
+          "Muscle weakness",
+          "Numbness or tingling",
+          "Swollen joints",
+          "Muscle cramps",
+          "Tremors",
+        ],
+        left_leg: [
+          "Knee pain",
+          "Hip pain",
+          "Swelling in legs",
+          "Leg cramps",
+          "Foot numbness",
+          "Heel pain",
+          "Muscle stiffness",
+          "Poor balance",
+        ],
+        right_leg: [
+          "Knee pain",
+          "Hip pain",
+          "Swelling in legs",
+          "Leg cramps",
+          "Foot numbness",
+          "Heel pain",
+          "Muscle stiffness",
+          "Poor balance",
+        ],
+      };
+      const regionLabels = {
+        head: "🧠 Head & Face",
+        neck: "🫀 Neck & Throat",
+        chest: "🫁 Chest & Heart",
+        abdomen: "🫃 Abdomen",
+        pelvis: "🫘 Pelvis & Urinary",
+        left_arm: "💪 Left Arm & Hand",
+        right_arm: "💪 Right Arm & Hand",
+        left_leg: "🦵 Left Leg & Foot",
+        right_leg: "🦵 Right Leg & Foot",
+      };
+      let activeRegion = null;
+
+      function toggleBodymap() {
+        const el = document.getElementById("bodymap-inner");
+        const btn = document.querySelector(".bodymap-toggle");
+        el.classList.toggle("open");
+        btn.textContent = el.classList.contains("open") ? "Hide ▲" : "Show ▼";
+      }
+
+      function initBodymap() {}
+
+      function selectRegion(region) {
+        // Deselect previous
+        document
+          .querySelectorAll(".body-region")
+          .forEach((el) => el.classList.remove("selected"));
+        // Select matching region element
+        const el = document.getElementById("bm-" + region);
+        if (el) el.classList.add("selected");
+        activeRegion = region;
+        const syms = regionSymptoms[region] || [];
+        document.getElementById("bm-region-title").textContent =
+          regionLabels[region] || region;
+        const chips = document.getElementById("bm-chips");
+        chips.innerHTML = syms
+          .map(
+            (s) =>
+              `<div class="bodymap-chip ${selected.has(s) ? "on" : ""}" id="bmc-${s.replace(/\W/g, "_")}" onclick="toggleBmSym('${s}')">${s}</div>`,
+          )
+          .join("");
+      }
+
+      function toggleBmSym(s) {
+        if (selected.has(s)) selected.delete(s);
+        else selected.add(s);
+        const el = document.getElementById("bmc-" + s.replace(/\W/g, "_"));
+        if (el) el.classList.toggle("on", selected.has(s));
+        const chip = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+        if (chip) chip.classList.toggle("on", selected.has(s));
+        renderSel();
+      }
+
+      // ── PRE-EXISTING CONDITIONS ──────────────────────────────────────────
+      const preConditions = [
+        "Diabetes",
+        "Hypertension",
+        "Asthma",
+        "Heart disease",
+        "Thyroid disorder",
+        "Kidney disease",
+        "Liver disease",
+        "COPD",
+        "Cancer (any)",
+        "Arthritis",
+        "Depression / Anxiety",
+        "Epilepsy",
+        "HIV / Immunocompromised",
+        "Pregnancy",
+        "Obesity (BMI ≥ 30)",
+        "Anaemia",
+        "PCOS",
+        "Stroke (history)",
+      ];
+      const selectedConditions = new Set();
+
+      function initConditions() {
+        const grid = document.getElementById("conditions-grid");
+        grid.innerHTML = preConditions
+          .map(
+            (c) =>
+              `<div class="cond-chip" id="cc-${c.replace(/\W/g, "_")}" onclick="toggleCondition('${c}')">${c}</div>`,
+          )
+          .join("");
+      }
+
+      function toggleCondition(c) {
+        if (selectedConditions.has(c)) selectedConditions.delete(c);
+        else selectedConditions.add(c);
+        document
+          .getElementById("cc-" + c.replace(/\W/g, "_"))
+          .classList.toggle("on", selectedConditions.has(c));
+      }
+
+      // ── MEDICATIONS ──────────────────────────────────────────────────────
+      const medications = new Set();
+      function addMed(e) {
+        if (e.key !== "Enter") return;
+        const inp = document.getElementById("med-input");
+        const v = inp.value.trim();
+        if (!v) return;
+        medications.add(v);
+        inp.value = "";
+        renderMeds();
+      }
+      function removeMed(m) {
+        medications.delete(m);
+        renderMeds();
+      }
+      function renderMeds() {
+        document.getElementById("meds-chips").innerHTML = [...medications]
+          .map(
+            (m) =>
+              `<div class="med-chip">${m}<button onclick="removeMed('${m}')">×</button></div>`,
+          )
+          .join("");
+      }
+
+      // ── HISTORY ─────────────────────────────────────────────────────────
+      function getHistory() {
+        try {
+          return JSON.parse(safeStorage.get("mediscan-history") || "[]");
+        } catch {
+          return [];
+        }
+      }
+      function saveHistory(h) {
+        safeStorage.set("mediscan-history", JSON.stringify(h));
+      }
+      function addHistoryEntry(syms) {
+        const h = getHistory();
+        h.unshift({ date: new Date().toLocaleString(), syms: [...syms] });
+        if (h.length > 10) h.pop();
+        saveHistory(h);
+        renderHistory();
+      }
+      function deleteHistoryItem(i) {
+        const h = getHistory();
+        h.splice(i, 1);
+        saveHistory(h);
+        renderHistory();
+      }
+      function clearHistory() {
+        saveHistory([]);
+        renderHistory();
+      }
+      function loadHistoryItem(syms) {
+        clearAll();
+        syms.forEach((s) => {
+          selected.add(s);
+          const c = document.getElementById("qc-" + s.replace(/\W/g, "_"));
+          if (c) c.classList.add("on");
+        });
+        renderSel();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+      function renderHistory() {
+        const h = getHistory();
+        const el = document.getElementById("history-items");
+        if (!h.length) {
+          el.innerHTML =
+            '<div class="no-history">No past checks yet. Run an analysis to save it here.</div>';
+          return;
+        }
+        el.innerHTML = h
+          .map(
+            (item, i) => `<div class="history-item">
+          <div class="history-item-info" onclick="loadHistoryItem(${JSON.stringify(item.syms)})">
+            <div class="history-item-date">🕐 ${item.date}</div>
+            <div class="history-item-syms">${item.syms.join(", ")}</div>
+          </div>
+          <button class="history-item-del" onclick="deleteHistoryItem(${i})" title="Delete">✕</button>
+        </div>`,
+          )
+          .join("");
+      }
+
+      // ── SEVERITY TIMELINE ────────────────────────────────────────────────
+      function getTimeline() {
+        try {
+          return JSON.parse(safeStorage.get("mediscan-timeline") || "[]");
+        } catch {
+          return [];
+        }
+      }
+      function saveTimeline(t) {
+        safeStorage.set("mediscan-timeline", JSON.stringify(t));
+      }
+      function addTimelineEntry() {
+        const score = parseInt(document.getElementById("tl-score").value);
+        const note = document.getElementById("tl-note").value.trim();
+        if (!score || score < 1 || score > 10) {
+          alert("Please enter a severity score between 1 and 10.");
+          return;
+        }
+        const t = getTimeline();
+        t.push({
+          date: new Date().toLocaleDateString("en-IN", {
+            day: "numeric",
+            month: "short",
+          }),
+          score,
+          note,
+        });
+        if (t.length > 14) t.shift();
+        saveTimeline(t);
+        document.getElementById("tl-score").value = "";
+        document.getElementById("tl-note").value = "";
+        renderTimeline();
+      }
+      function clearTimeline() {
+        saveTimeline([]);
+        renderTimeline();
+      }
+      function toggleTimeline() {
+        const el = document.getElementById("timeline-inner");
+        const btn = document.querySelector(".timeline-wrap .bodymap-toggle");
+        el.classList.toggle("open");
+        btn.textContent = el.classList.contains("open") ? "Hide ▲" : "Show ▼";
+      }
+      function renderTimeline() {
+        const t = getTimeline();
+        const el = document.getElementById("timeline-chart");
+        if (!t.length) {
+          el.innerHTML =
+            '<div style="font-size:13px;color:var(--text3);text-align:center;padding:12px;">No entries yet. Log your daily severity above.</div>';
+          return;
+        }
+        const bars = t
+          .map((e) => {
+            const h = Math.max(4, (e.score / 10) * 76);
+            const col =
+              e.score >= 8
+                ? "var(--warn)"
+                : e.score >= 5
+                  ? "var(--moderate)"
+                  : "var(--accent)";
+            return `<div class="tbar" style="height:${h}px;background:${col};"><div class="tbar-tip">${e.date}: ${e.score}/10${e.note ? " — " + e.note : ""}</div></div>`;
+          })
+          .join("");
+        const labels = t.map((e) => `<span>${e.date}</span>`).join("");
+        el.innerHTML = `<div class="timeline-bar-wrap">${bars}</div><div class="timeline-labels">${labels}</div>`;
+      }
+
+      // ── FIND DOCTOR NEAR ME ──────────────────────────────────────────────
+      function findDoctorNearMe(doctorType) {
+        const q = encodeURIComponent(doctorType + " near me");
+        window.open("https://www.google.com/maps/search/" + q, "_blank");
+      }
+
+      // ── PRINT RESULTS ────────────────────────────────────────────────────
+      function printResults() {
+        window.print();
+      }
     </script>
   </body>
 </html>
