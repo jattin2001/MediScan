@@ -3742,12 +3742,6 @@
         tog.classList.toggle("open");
       }
 
-      init();
-      initBodymap();
-      initConditions();
-      renderHistory();
-      renderTimeline();
-
       // ── SAFE STORAGE (works locally via file:// AND hosted) ─────────────
       const safeStorage = {
         get(key) {
@@ -4213,6 +4207,13 @@
       function printResults() {
         window.print();
       }
+
+      // ── STARTUP ──────────────────────────────────────────────────────────
+      init();
+      initBodymap();
+      initConditions();
+      renderHistory();
+      renderTimeline();
     </script>
   </body>
 </html>
